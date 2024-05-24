@@ -1,9 +1,9 @@
 import { useState } from "react";
-import BooksTable from "./components/BooksTable";
+import BooksTable from "./components/BooksTable.js";
 import CustomersTable from "./components/CustomersTable";
 import Header from "./components/Header";
 import RentalsTable from "./components/RentalsTable";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [page, setPage] = useState("books");

@@ -5,17 +5,17 @@ const RentalsTable = () => {
   const [rentals, setRentals] = useState([]);
 
   const fillTable = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/spring/api/rental");
+    const response = await fetch("http://localhost:8080/rental");
     if (response.ok) {
       setRentals([]);
       const data = await response.json();
       for (const key in data) {
         const rental = {
           id: data[key].id,
-          book: data[key].book.name,
-          bookId: data[key].book.id,
+          book: data[key].bookCopy.book.name,
+          isbn: data[key].bookCopy.isbn,
           customer:
-            data[key].customer.firstName + " " + data[key].customer.lastName,
+            data[key].customer.firstname + " " + data[key].customer.lastname,
           customerId: data[key].customer.id,
           borrowedAt: data[key].borrowedAt,
           returnBy: data[key].returnBy,
@@ -32,7 +32,7 @@ const RentalsTable = () => {
 
   const returnBookHandler = async (id, bookId, customerId) => {
     const response = await fetch(
-      "http://localhost:8080/spring/api/rental/customers/" +
+      "http://localhost:8080/rental/customers/" +
         customerId +
         "/books/" +
         bookId +
@@ -49,9 +49,9 @@ const RentalsTable = () => {
     }
   };
 
-  const extendReturningDateHandler = async(id, bookId, customerId) => {
+  const extendReturningDateHandler = async (id, bookId, customerId) => {
     const response = await fetch(
-      "http://localhost:8080/spring/api/rental/customers/" +
+      "http://localhost:8080/rental/customers/" +
         customerId +
         "/books/" +
         bookId +
@@ -86,12 +86,12 @@ const RentalsTable = () => {
             key={rental.id}
             rental={rental}
             onReturnBook={() => {
-              returnBookHandler(rental.id, rental.bookId, rental.customerId);
+              returnBookHandler(rental.id, rental.isbn, rental.customerId);
             }}
             onExtendReturningDate={() => {
               extendReturningDateHandler(
                 rental.id,
-                rental.bookId,
+                rental.isbn,
                 rental.customerId
               );
             }}

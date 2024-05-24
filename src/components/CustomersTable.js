@@ -28,6 +28,7 @@ const modalReducer = (state, action) => {
 
 const CustomersTable = (props) => {
   const [customers, setCustomers] = useState([]);
+  const [filter, setFilter] = useState("");
   const [modalState, dispatchModal] = useReducer(modalReducer, {
     mode: "",
     showing: false,
@@ -42,12 +43,9 @@ const CustomersTable = (props) => {
   };
 
   const deleteCustomerHandler = async (id) => {
-    const response = await fetch(
-      "http://localhost:8080/spring/api/customer/" + id,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch("http://localhost:8080/customer/" + id, {
+      method: "DELETE",
+    });
     if (response.ok) {
       setCustomers((prev) => prev.filter((customer) => customer.id !== id));
     }
@@ -62,16 +60,16 @@ const CustomersTable = (props) => {
   };
 
   const fillTable = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/spring/api/customer");
+    const response = await fetch("http://localhost:8080/customer/all");
     if (response.ok) {
       setCustomers([]);
       const data = await response.json();
       for (const key in data) {
         const customer = {
           id: data[key].id,
-          firstName: data[key].firstName,
-          lastName: data[key].lastName,
-          passportNum: data[key].passportNum,
+          firstname: data[key].firstname,
+          lastname: data[key].lastname,
+          email: data[key].email,
         };
         setCustomers((prev) => [...prev, customer]);
       }
@@ -89,31 +87,55 @@ const CustomersTable = (props) => {
 
   return (
     <>
+      <form>
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control form-control-lg"
+            placeholder="Search Here"
+            id="search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        </div>
+      </form>
       <table className="table">
         <thead>
           <tr>
             <th>Id</th>
             <th>Firstname</th>
             <th>Lastname</th>
-            <th>Passport number</th>
+            <th>Email</th>
             <th>
-              <button onClick={addCustomerHandler} className="open-AddBookDialog-2 btn btn-primary">Add</button>
+              <button
+                onClick={addCustomerHandler}
+                className="open-AddBookDialog-2 btn btn-primary"
+              >
+                Add
+              </button>
             </th>
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer) => (
-            <Customer
-              key={customer.id}
-              customer={customer}
-              onEditCustomer={() => {
-                editCustomerHandler(customer.id);
-              }}
-              onDeleteCustomer={() => {
-                deleteCustomerHandler(customer.id);
-              }}
-            />
-          ))}
+          {customers
+            .filter(
+              (el) =>
+                el.firstname.includes(filter) ||
+                el.lastname.includes(filter) ||
+                el.email.includes(filter)
+            )
+            .map((customer) => (
+              <Customer
+                key={customer.id}
+                customer={customer}
+                onEditCustomer={() => {
+                  editCustomerHandler(customer.id);
+                }}
+                onDeleteCustomer={() => {
+                  deleteCustomerHandler(customer.id);
+                }}
+              />
+            ))}
         </tbody>
       </table>
       {modalState.showing && (

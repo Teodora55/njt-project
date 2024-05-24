@@ -1,28 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import Input from "../UI/Input";
+import { useEffect, useState } from "react";
+import { Button, TextField, Typography } from "@mui/material";
 
 const CustomerModal = (props) => {
   const [customer, setCustomer] = useState(props.customer);
 
-  const firstnameRef = useRef();
-  const lastnameRef = useRef();
-  const passportNumRef = useRef();
-
-  const firstRender = useRef(true);
-
   const submitHandler = (event) => {
     event.preventDefault();
-    setCustomer({
-      ...customer,
-      firstName: firstnameRef.current.inputValue,
-      lastName: lastnameRef.current.inputValue,
-      passportNum: passportNumRef.current.inputValue,
-    });
+    if (props.mode === "edit") editCustomerHandler();
+    else if (props.mode === "add") addCustomerHandler();
   };
 
   const editCustomerHandler = async () => {
     const response = await fetch(
-      "http://localhost:8080/spring/api/customer/" + customer.id,
+      "http://localhost:8080/customer/" + customer.id,
       {
         method: "PUT",
         headers: new Headers({
@@ -37,7 +27,7 @@ const CustomerModal = (props) => {
   };
 
   const addCustomerHandler = async () => {
-    const response = await fetch("http://localhost:8080/spring/api/customer", {
+    const response = await fetch("http://localhost:8080/customer", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json",
@@ -49,51 +39,64 @@ const CustomerModal = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-    } else if (props.mode === "edit") editCustomerHandler();
-    else if (props.mode === "add") addCustomerHandler();
-  }, [customer]);
-
   return (
     <div className="modal-body">
       <form onSubmit={submitHandler}>
         <input type="hidden" name="id" value={customer.id} />
-        <Input
-          ref={firstnameRef}
+        <Typography variant="h6" className="modal-element">
+          Customer Information
+        </Typography>
+        <TextField
+          variant="outlined"
           label="Firstname"
-          name="firstname"
-          placeholder="Firstname"
-          type="text"
-          value={customer.firstName}
+          className="modal-element"
+          value={customer.firstname}
+          onChange={(e) =>
+            setCustomer((prev) => ({ ...prev, firstname: e.target.value }))
+          }
         />
-        <Input
-          ref={lastnameRef}
+        <TextField
+          variant="outlined"
           label="Lastname"
-          name="lastname"
-          placeholder="Lastname"
-          type="text"
-          value={customer.lastName}
+          className="modal-element"
+          value={customer.lastname}
+          onChange={(e) =>
+            setCustomer((prev) => ({ ...prev, lastname: e.target.value }))
+          }
         />
-        <Input
-          ref={passportNumRef}
-          label="Passport number"
-          name="passportNum"
-          placeholder="Passport number"
-          type="text"
-          value={customer.passportNum}
+        <TextField
+          variant="outlined"
+          label="Email"
+          className="modal-element"
+          value={customer.email}
+          onChange={(e) =>
+            setCustomer((prev) => ({ ...prev, email: e.target.value }))
+          }
         />
         <div>
           {props.mode === "add" && (
-            <button type="submit" id="add" className="btn btn-warning float-end">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className="modal-element"
+              id="add"
+              sx={{ marginTop: "16px" }}
+            >
               Add
-            </button>
+            </Button>
           )}
           {props.mode === "edit" && (
-            <button type="submit" id="edit" className="btn btn-warning float-end">
+            <Button
+              type="submit"
+              variant="contained"
+              color="warning"
+              className="modal-element"
+              id="edit"
+              sx={{ marginTop: "16px" }}
+            >
               Edit
-            </button>
+            </Button>
           )}
         </div>
       </form>

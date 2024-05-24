@@ -15,7 +15,7 @@ const modalReducer = (state, action) => {
     return {
       mode: "add",
       showing: true,
-      book:{}
+      book: {},
     };
   }
   if (action.type === "CLOSE_MODAL") {
@@ -28,6 +28,8 @@ const modalReducer = (state, action) => {
 
 const BooksTable = (props) => {
   const [books, setBooks] = useState([]);
+  const [filter, setFilter] = useState("");
+  const [error, setError] = useState(false);
   const [modalState, dispatchModal] = useReducer(modalReducer, {
     mode: "",
     showing: false,
@@ -42,12 +44,9 @@ const BooksTable = (props) => {
   };
 
   const deleteBookHandler = async (id) => {
-    const response = await fetch(
-      "http://localhost:8080/spring/api/book/" + id,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch("http://localhost:8080/book/" + id, {
+      method: "DELETE",
+    });
     if (response.ok) {
       setBooks((prev) => prev.filter((book) => book.id !== id));
     }
@@ -56,7 +55,11 @@ const BooksTable = (props) => {
   const rentBookHandler = async (id) => {
     const customerId = 0;
     const response = await fetch(
-      "http://localhost:8080/spring/api/rental/customers/" + customerId + "/books/" + id + "/borrow",
+      "http://localhost:8080/rental/customers/" +
+        customerId +
+        "/books/" +
+        id +
+        "/borrow",
       {
         method: "POST",
       }
@@ -75,27 +78,32 @@ const BooksTable = (props) => {
   };
 
   const fillTable = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/spring/api/book");
+    const url = new URL("http://localhost:8080/book/all");
+    if (filter !== "") url.searchParams.append("filter", filter);
+
+    const response = await fetch(url);
     if (response.ok) {
       setBooks([]);
+      setError(false);
       const data = await response.json();
       for (const key in data) {
         const book = {
           id: data[key].id,
-          isbn: data[key].isbn,
           name: data[key].name,
           author: data[key].author,
-          numPages: data[key].numPages,
+          price: data[key].price,
           genre: data[key].genre,
         };
         setBooks((prev) => [...prev, book]);
       }
+    } else {
+      setError(true);
     }
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
     fillTable();
-  }, [fillTable]);
+  }, []);
 
   const changeHandler = () => {
     closeHandler();
@@ -104,37 +112,56 @@ const BooksTable = (props) => {
 
   return (
     <>
-      <table id="bookTable" className="table">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Author</th>
-            <th scope="col">ISBN</th>
-            <th scope="col">Number of Pages</th>
-            <th scope="col">Genre</th>
-            <th scope="col"><button onClick={addBookHandler} className="open-AddBookDialog-2 btn btn-primary">Add</button></th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map((book) => (
-            <Book
-              key={book.id}
-              book={book}
-              onEditBook={() => {
-                editBookHandler(book.id);
-              }}
-              onDeleteBook={() => {
-                deleteBookHandler(book.id);
-              }}
-              onRentBook={() => {
-                rentBookHandler(book.id);
-              }}
-            />
-          ))}
-        </tbody>
-      </table>
-      {modalState.showing && (     
+      <div className="input-group mb-3">
+        <input
+          type="text"
+          className="form-control form-control-lg"
+          placeholder="Search Here"
+          id="search"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
+      </div>
+      {error && <h1>No books found</h1>}
+      {!error && (
+        <table id="bookTable" className="table">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Author</th>
+              <th scope="col">Price</th>
+              <th scope="col">Genre</th>
+              <th scope="col">
+                <button
+                  onClick={addBookHandler}
+                  className="open-AddBookDialog-2 btn btn-primary"
+                >
+                  Add
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {books.map((book) => (
+              <Book
+                key={book.id}
+                book={book}
+                onEditBook={() => {
+                  editBookHandler(book.id);
+                }}
+                onDeleteBook={() => {
+                  deleteBookHandler(book.id);
+                }}
+                onRentBook={() => {
+                  rentBookHandler(book.id);
+                }}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
+      {modalState.showing && (
         <Modal onClose={closeHandler}>
           <EditBookModal
             mode={modalState.mode}
