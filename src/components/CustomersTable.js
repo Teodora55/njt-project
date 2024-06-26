@@ -45,6 +45,7 @@ const CustomersTable = (props) => {
   const deleteCustomerHandler = async (id) => {
     const response = await fetch("http://localhost:8080/customer/" + id, {
       method: "DELETE",
+      credentials: "include",
     });
     if (response.ok) {
       setCustomers((prev) => prev.filter((customer) => customer.id !== id));
@@ -60,7 +61,9 @@ const CustomersTable = (props) => {
   };
 
   const fillTable = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/customer/all");
+    const response = await fetch("http://localhost:8080/customer/all", {
+      credentials: "include",
+    });
     if (response.ok) {
       setCustomers([]);
       const data = await response.json();

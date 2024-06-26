@@ -56,6 +56,7 @@ const EditBookModal = (props) => {
         "Content-Type": "application/json",
       }),
       body: JSON.stringify(book),
+      credentials: "include",
     });
     if (response.ok) {
       props.onChange();
@@ -69,6 +70,7 @@ const EditBookModal = (props) => {
         "Content-Type": "application/json",
       }),
       body: JSON.stringify(book),
+      credentials: "include",
     });
     if (response.ok) {
       props.onChange();
@@ -76,7 +78,9 @@ const EditBookModal = (props) => {
   };
 
   const loadAuthors = async () => {
-    const response = await fetch("http://localhost:8080/author/all");
+    const response = await fetch("http://localhost:8080/author/all", {
+      credentials: "include",
+    });
     const data = await response.json();
     for (const key in data) {
       const author = {

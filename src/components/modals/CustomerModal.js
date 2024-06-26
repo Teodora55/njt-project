@@ -19,6 +19,7 @@ const CustomerModal = (props) => {
           "Content-Type": "application/json",
         }),
         body: JSON.stringify(customer),
+        credentials: "include",
       }
     );
     if (response.ok) {
@@ -33,6 +34,7 @@ const CustomerModal = (props) => {
         "Content-Type": "application/json",
       }),
       body: JSON.stringify(customer),
+      credentials: "include",
     });
     if (response.ok) {
       props.onChange();

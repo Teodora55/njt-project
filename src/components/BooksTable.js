@@ -1,7 +1,14 @@
-import { useCallback, useEffect, useState, useReducer } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  useReducer,
+  useContext,
+} from "react";
 import Book from "./Book";
 import EditBookModal from "./modals/BookEditModal";
 import Modal from "./modals/Modal";
+import { UserContext } from "../context/UserContext";
 
 const modalReducer = (state, action) => {
   if (action.type === "SHOW_EDIT_MODAL") {
@@ -30,6 +37,7 @@ const BooksTable = (props) => {
   const [books, setBooks] = useState([]);
   const [filter, setFilter] = useState("");
   const [error, setError] = useState(false);
+  const { user } = useContext(UserContext);
   const [modalState, dispatchModal] = useReducer(modalReducer, {
     mode: "",
     showing: false,
@@ -46,6 +54,7 @@ const BooksTable = (props) => {
   const deleteBookHandler = async (id) => {
     const response = await fetch("http://localhost:8080/book/" + id, {
       method: "DELETE",
+      credentials: "include",
     });
     if (response.ok) {
       setBooks((prev) => prev.filter((book) => book.id !== id));
@@ -53,15 +62,15 @@ const BooksTable = (props) => {
   };
 
   const rentBookHandler = async (id) => {
-    const customerId = 0;
     const response = await fetch(
       "http://localhost:8080/rental/customers/" +
-        customerId +
+        user.customerId +
         "/books/" +
         id +
         "/borrow",
       {
         method: "POST",
+        credentials: "include",
       }
     );
     if (response.ok) {
@@ -81,7 +90,9 @@ const BooksTable = (props) => {
     const url = new URL("http://localhost:8080/book/all");
     if (filter !== "") url.searchParams.append("filter", filter);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      credentials: "include",
+    });
     if (response.ok) {
       setBooks([]);
       setError(false);

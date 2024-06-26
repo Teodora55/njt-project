@@ -5,7 +5,9 @@ const RentalsTable = () => {
   const [rentals, setRentals] = useState([]);
 
   const fillTable = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/rental");
+    const response = await fetch("http://localhost:8080/rental", {
+      credentials: "include",
+    });
     if (response.ok) {
       setRentals([]);
       const data = await response.json();
@@ -37,7 +39,7 @@ const RentalsTable = () => {
         "/books/" +
         bookId +
         "/return",
-      { method: "POST" }
+      { method: "POST", credentials: "include" }
     );
     if (response.ok) {
       const data = await response.json();
@@ -56,7 +58,7 @@ const RentalsTable = () => {
         "/books/" +
         bookId +
         "/extend",
-      { method: "POST" }
+      { method: "POST", credentials: "include" }
     );
     if (response.ok) {
       const data = await response.json();
