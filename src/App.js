@@ -1,5 +1,4 @@
 import { useState } from "react";
-import BooksTable from "./components/BooksTable.js";
 import CustomersTable from "./components/CustomersTable";
 import Header from "./components/Header";
 import RentalsTable from "./components/RentalsTable";
@@ -7,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import RegistrationForm from "./components/RegistrationForm.js";
 import LoginForm from "./components/LoginForm.js";
 import { UserProvider } from "./context/UserContext.js";
+import BookPage from "./components/book/BookPage.js";
 
 function App() {
   const [page, setPage] = useState("");
@@ -50,7 +50,7 @@ function App() {
           onChangeToBookPage={bookHandler}
         />
       )}
-      {page === "books" && <BooksTable onRentBook={rentBookHandler} />}
+      {page === "books" && <BookPage />}
       {page === "rentals" && <RentalsTable />}
       {page === "customers" && <CustomersTable />}
     </UserProvider>

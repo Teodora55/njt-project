@@ -1,0 +1,53 @@
+.container {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  margin: 0px 50px;
+}
+
+.search-bar-container {
+  grid-column: 1 / -1;
+  padding: 20px 0px;
+  background-color: white;
+}
+
+.sidebar {
+  grid-row: 2 / -1;
+  padding: 20px;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+}
+
+.content {
+  grid-row: 2 / -1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.book-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.book-block {
+  margin-bottom: 20px;
+}
+
+.book-name {
+  text-align: center;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
