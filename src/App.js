@@ -7,6 +7,7 @@ import RegistrationForm from "./components/RegistrationForm.js";
 import LoginForm from "./components/LoginForm.js";
 import { UserProvider } from "./context/UserContext.js";
 import BookPage from "./components/book/BookPage.js";
+import PaymentPage from "./components/PaymentPage.js";
 
 function App() {
   const [page, setPage] = useState("");
@@ -31,6 +32,10 @@ function App() {
     setPage("register");
   };
 
+  const paymentHandler = () => {
+    setPage("payment");
+  };
+
   return (
     <UserProvider>
       <Header
@@ -42,6 +47,7 @@ function App() {
         <LoginForm
           onRegistration={registerHandler}
           onChangeToBookPage={bookHandler}
+          onChangeToPaymentPage={paymentHandler}
         />
       )}
       {page === "register" && (
@@ -53,6 +59,7 @@ function App() {
       {page === "books" && <BookPage />}
       {page === "rentals" && <RentalsTable />}
       {page === "customers" && <CustomersTable />}
+      {page === "payment" && <PaymentPage onChangeToLoginPage={loginHandler} />}
     </UserProvider>
   );
 }

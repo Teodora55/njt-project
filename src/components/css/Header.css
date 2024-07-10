@@ -1,0 +1,12 @@
+.appBar {
+  background-color: #333;
+  box-shadow: none;
+}
+
+.menuButton {
+  margin-right: 16px;
+}
+
+.title {
+  flex-grow: 1;
+}

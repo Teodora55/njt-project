@@ -1,0 +1,11 @@
+.card-element-container {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.card-element {
+  padding: 10px;
+}
