@@ -23,8 +23,43 @@
   display: flex !important;
 }
 
+.modal-body {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  gap: 10px;
+}
+
 .modal-element {
   margin: 5px !important;
+  width: 100%;
+}
+
+.custom-divider {
+  width: 100%;
+  border-bottom: 2px solid black !important;
+}
+
+.notification-list-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 0;
+  cursor: pointer;
+}
+
+.notification-title {
+  margin-bottom: 8px;
+}
+
+.notification-divider {
+  width: 100%;
+  border-bottom-width: 2px;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.bold {
+  font-weight: bold !important;
 }
 
 @media (min-width: 768px) {

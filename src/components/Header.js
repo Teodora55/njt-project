@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import "./css/Header.css";
 import Modal from "./modals/Modal";
 import NotificationModal from "./modals/NotificationModal";
+import { Badge } from "@mui/material";
 
 const Header = (props) => {
   const { user } = useContext(UserContext);
@@ -18,6 +19,18 @@ const Header = (props) => {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const openedNotificationsHandler = (id) => {
+    user.notifications = user.notifications.map((notification) => {
+      return notification.id === id
+        ? { ...notification, received: true }
+        : notification;
+    });
+  };
+
+  const unreadCount = user.notifications.filter(
+    (notification) => !notification.received
+  ).length;
 
   return (
     <AppBar position="static" className="appBar" elevation={0}>
@@ -46,13 +59,18 @@ const Header = (props) => {
             Book Rentals
           </Button>
           <IconButton color="inherit" onClick={handleOpenModal}>
-            <NotificationsIcon />
+            <Badge badgeContent={unreadCount} color="error">
+              <NotificationsIcon />
+            </Badge>
           </IconButton>
         </Box>
       </Toolbar>
       {openModal && (
         <Modal onClose={handleCloseModal}>
-          <NotificationModal notifications={user.notifications} />
+          <NotificationModal
+            notifications={user.notifications}
+            openedNotifications={openedNotificationsHandler}
+          />
         </Modal>
       )}
     </AppBar>

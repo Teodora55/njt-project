@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Container,
   TextField,
@@ -9,9 +9,10 @@ import {
   Link,
   Grid,
 } from "@mui/material";
+import { UserContext } from "../context/UserContext";
 
 const RegistrationForm = (props) => {
-  const [user, setUser] = useState({
+  const [newUser, setNewUser] = useState({
     firstname: "",
     lastname: "",
     jmbg: "",
@@ -21,18 +22,19 @@ const RegistrationForm = (props) => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const { setUser, setLogin } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({
-      ...user,
+    setNewUser({
+      ...newUser,
       [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user.password !== user.confirmPassword) {
+    if (newUser.password !== newUser.confirmPassword) {
       setError("Passwords do not match!");
     } else {
       setError("");
@@ -47,15 +49,17 @@ const RegistrationForm = (props) => {
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(user),
+      body: JSON.stringify(newUser),
       credentials: "include",
     });
     if (response.ok) {
       setError("Username is registered");
       props.onChangeToBookPage();
+      setUser(newUser);
+      setLogin(true);
     } else {
       setError("Username is already used");
-      setUser((prev) => ({
+      setNewUser((prev) => ({
         ...prev,
         username: "",
       }));
@@ -73,7 +77,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Firstname"
           name="firstname"
-          value={user.firstname}
+          value={newUser.firstname}
           onChange={handleChange}
           required
         />
@@ -82,7 +86,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Lastname"
           name="lastname"
-          value={user.lastname}
+          value={newUser.lastname}
           onChange={handleChange}
           required
         />
@@ -91,7 +95,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="JMBG"
           name="jmbg"
-          value={user.jmbg}
+          value={newUser.jmbg}
           onChange={handleChange}
           required
           inputProps={{
@@ -104,7 +108,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Email"
           name="email"
-          value={user.email}
+          value={newUser.email}
           onChange={handleChange}
           required
           type="email"
@@ -114,7 +118,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Username"
           name="username"
-          value={user.username}
+          value={newUser.username}
           onChange={handleChange}
           required
         />
@@ -123,7 +127,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Password"
           name="password"
-          value={user.password}
+          value={newUser.password}
           onChange={handleChange}
           required
           type="password"
@@ -133,7 +137,7 @@ const RegistrationForm = (props) => {
           margin="normal"
           label="Confirm Password"
           name="confirmPassword"
-          value={user.confirmPassword}
+          value={newUser.confirmPassword}
           onChange={handleChange}
           required
           type="password"

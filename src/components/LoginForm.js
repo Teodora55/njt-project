@@ -16,7 +16,7 @@ const LoginForm = (props) => {
     password: "",
   });
   const [error, setError] = useState("");
-  const { setUser } = useContext(UserContext);
+  const { setUser, setLogin } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +43,7 @@ const LoginForm = (props) => {
       setError("");
       const data = await response.json();
       setUser(data);
+      setLogin(true);
       props.onChangeToBookPage();
     } else if (response.status === 403) {
       setError("Invalid username or password");

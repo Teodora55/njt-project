@@ -1,0 +1,21 @@
+.container {
+  margin: 10px 0px;
+  width: 100% !important;
+}
+
+.paper {
+  border: none;
+  box-shadow: none;
+}
+
+.table {
+  border: none;
+}
+
+.table td {
+  border: none;
+}
+
+.table tr {
+  height: 10vh;
+}
