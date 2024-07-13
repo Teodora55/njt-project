@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Box from "@mui/material/Box";
 import "./css/Header.css";
 import Modal from "./modals/Modal";
@@ -20,12 +21,21 @@ const Header = (props) => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const openedNotificationsHandler = (id) => {
-    user.notifications = user.notifications.map((notification) => {
-      return notification.id === id
-        ? { ...notification, received: true }
-        : notification;
-    });
+  const openedNotificationsHandler = async (id) => {
+    const response = await fetch(
+      `http://localhost:8080/notify/received/${id}`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      user.notifications = user.notifications.map((notification) => {
+        return notification.id === id
+          ? { ...notification, received: true }
+          : notification;
+      });
+    }
   };
 
   const unreadCount = user.notifications.filter(
@@ -57,6 +67,13 @@ const Header = (props) => {
           )}
           <Button color="inherit" onClick={props.onChangeToRentalPage}>
             Book Rentals
+          </Button>
+          <Button
+            color="inherit"
+            startIcon={<AccountCircleIcon />}
+            onClick={props.onChangeToAccountPage}
+          >
+            My Account
           </Button>
           <IconButton color="inherit" onClick={handleOpenModal}>
             <Badge badgeContent={unreadCount} color="error">

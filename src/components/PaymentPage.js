@@ -18,7 +18,7 @@ import { UserContext } from "../context/UserContext";
 const PaymentPage = (props) => {
   const [error, setError] = useState(null);
 
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,7 +32,19 @@ const PaymentPage = (props) => {
     });
 
     if (response.ok) {
-      props.onChangeToLoginPage();
+      if (user.membershipExpiration) {
+        const currentExpirationDate = new Date(user.membershipExpiration);
+        currentExpirationDate.setFullYear(
+          currentExpirationDate.getFullYear() + 1
+        );
+        setUser((prevUser) => ({
+          ...prevUser,
+          membershipExpiration: currentExpirationDate
+            .toISOString()
+            .split("T")[0],
+        }));
+        props.onChangeToAccountPage();
+      } else props.onChangeToLoginPage();
     } else {
       setError("There is error with extending you membership!");
     }
@@ -91,7 +103,9 @@ const PaymentPage = (props) => {
             variant="contained"
             color="primary"
             sx={{ mt: 3, mb: 2 }}
-          ></Button>
+          >
+            Pay
+          </Button>
         </Box>
       </Box>
     </Container>

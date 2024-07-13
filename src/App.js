@@ -8,6 +8,7 @@ import LoginForm from "./components/LoginForm.js";
 import { UserContext } from "./context/UserContext.js";
 import BookPage from "./components/book/BookPage.js";
 import PaymentPage from "./components/PaymentPage.js";
+import MyAccount from "./components/account/MyAccount.js";
 
 function App() {
   const [page, setPage] = useState("");
@@ -37,6 +38,10 @@ function App() {
     setPage("payment");
   };
 
+  const accountHandler = () => {
+    setPage("account");
+  };
+
   return (
     <>
       {login && (
@@ -44,6 +49,7 @@ function App() {
           onChangeToRentalPage={rentBookHandler}
           onChangeToBookPage={bookHandler}
           onChangeToCustomerPage={customerHandler}
+          onChangeToAccountPage={accountHandler}
         />
       )}
       {page === "" && (
@@ -62,7 +68,15 @@ function App() {
       {page === "books" && <BookPage />}
       {page === "rentals" && <RentalsTable />}
       {page === "customers" && <CustomersTable />}
-      {page === "payment" && <PaymentPage onChangeToLoginPage={loginHandler} />}
+      {page === "payment" && (
+        <PaymentPage
+          onChangeToLoginPage={loginHandler}
+          onChangeToAccountPage={accountHandler}
+        />
+      )}
+      {page === "account" && (
+        <MyAccount onChangeToPaymentPage={paymentHandler} />
+      )}
     </>
   );
 }
