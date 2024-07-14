@@ -1,10 +1,13 @@
 import React, { useRef } from "react";
 import { Button, Grid } from "@mui/material";
-import "./../css/MyAccount.css";
 import AccountInfo from "./AccountInfo";
 import AccountRentals from "./AccountRentals";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import LibraryInfo from "./LibraryInfo";
+import AccountSummery from "./AccountSummery";
+import "./../css/MyAccount.css";
+import "./../css/Pdf.css";
 
 const MyAccount = ({ onChangeToPaymentPage }) => {
   const rentalsRef = useRef();
@@ -42,6 +45,8 @@ const MyAccount = ({ onChangeToPaymentPage }) => {
       </Grid>
       <Grid item xs={16} md={8}>
         <div ref={rentalsRef}>
+          <LibraryInfo />
+          <AccountSummery />
           <AccountRentals />
         </div>
         <Button

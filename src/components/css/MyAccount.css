@@ -28,22 +28,6 @@
   margin-top: 16px;
 }
 
-.rentals-container {
-  padding: 24px;
-}
-
-.field-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.get-pdf-button {
-  margin: 24px !important;
-  width: 100%;
-  padding: 16px;
-  font-size: 18px;
-}
-
 @media (max-width: 768px) {
   .account-container {
     flex-direction: column;

@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { format } from "date-fns";
 import AccountRental from "./AccountRental";
 
 const AccountRentals = () => {
@@ -58,6 +59,9 @@ const AccountRentals = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Typography variant="body2" className="date-text">
+        {"Date: " + format(new Date(), "dd.mm.yyyy")}
+      </Typography>
     </Box>
   );
 };

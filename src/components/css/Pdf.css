@@ -1,0 +1,53 @@
+.info-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.library-info-grid {
+  margin-top: 20px;
+}
+
+.info-label {
+  font-weight: bold;
+}
+
+.info-value {
+  text-align: left;
+}
+
+.rentals-container {
+  padding: 24px;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-field {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.info-field .MuiTypography-subtitle1 {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.get-pdf-button {
+  margin: 24px !important;
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+}
+
+.library-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.date-text {
+  text-align: right;
+  margin-top: 16px !important;
+}
