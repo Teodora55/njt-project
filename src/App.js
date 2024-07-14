@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import CustomersTable from "./components/customer/CustomersTable.js";
 import Header from "./components/Header";
-import RentalsTable from "./components/RentalsTable";
+import RentalsTable from "./components/rentals/RentalsTable.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RegistrationForm from "./components/RegistrationForm.js";
 import LoginForm from "./components/LoginForm.js";
