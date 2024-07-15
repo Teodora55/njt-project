@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
 import "./css/Header.css";
 import Modal from "./modals/Modal";
@@ -20,6 +21,22 @@ const Header = (props) => {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const logoutHandler = async () => {
+    const url = new URL("http://localhost:8080/logout");
+    const response = await fetch(url, {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      localStorage.removeItem("user");
+      props.onChangeToLoginPage();
+    }
+  };
 
   const openedNotificationsHandler = async (id) => {
     const response = await fetch(
@@ -80,6 +97,13 @@ const Header = (props) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <Button
+            color="inherit"
+            startIcon={<LogoutIcon />}
+            onClick={logoutHandler}
+          >
+            Logout
+          </Button>
         </Box>
       </Toolbar>
       {openModal && (

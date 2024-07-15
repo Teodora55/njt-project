@@ -44,6 +44,7 @@ const LoginForm = (props) => {
       const data = await response.json();
       setUser(data);
       setLogin(true);
+      localStorage.setItem("user", JSON.stringify(data));
       props.onChangeToBookPage();
     } else if (response.status === 403) {
       setError("Invalid username or password");
