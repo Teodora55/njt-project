@@ -16,7 +16,7 @@ import NotificationModal from "./modals/NotificationModal";
 import { Badge } from "@mui/material";
 
 const Header = (props) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser, setLogin } = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -34,6 +34,8 @@ const Header = (props) => {
 
     if (response.ok) {
       localStorage.removeItem("user");
+      setUser(null);
+      setLogin(false);
       props.onChangeToLoginPage();
     }
   };

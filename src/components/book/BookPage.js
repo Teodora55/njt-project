@@ -1,90 +1,33 @@
-import { useEffect, useState } from "react";
-import BookGrid from "./BookGrid";
+import React from "react";
+import Books from "./Books";
 import BookFilter from "./BookFilter";
 import SearchBar from "../UI/SearchBar";
+import Modal from "../modals/Modal";
+import useBook from "../hooks/BookHook";
 import "./../css/BookPage.css";
+import { Button, Typography } from "@mui/material";
+import EditBookModal from "../modals/BookEditModal";
 
 const BookPage = () => {
-  const [books, setBooks] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
-  const [authors, setAuthors] = useState([]);
-  const [bookshelves, setBookshelves] = useState([]);
-  const [filters, setFilters] = useState({
-    authors: [],
-    bookshelves: [],
-  });
-  const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    fetchBooks();
-    fetchAuthors();
-    fetchBookShelves();
-  }, []);
-
-  useEffect(() => {
-    setFilteredBooks(
-      books.filter((book) => {
-        return (
-          book.author.some((bookAuthor) =>
-            filters.authors.includes(
-              bookAuthor.firstname + " " + bookAuthor.lastname
-            )
-          ) ||
-          book.bookshelves.some((shelf) =>
-            filters.bookshelves.includes(shelf.name)
-          ) ||
-          book.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      })
-    );
-  }, [books, filters, searchTerm]);
-
-  const fetchBooks = async () => {
-    fetch("http://localhost:8080/book/all", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setBooks(data))
-      .catch((error) => console.error("Error fetching books:", error));
-  };
-
-  const fetchAuthors = async () => {
-    fetch("http://localhost:8080/author/all", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) =>
-        setAuthors(
-          data.map((author) => author.firstname + " " + author.lastname)
-        )
-      )
-      .catch((error) => console.error("Error fetching authors:", error));
-  };
-
-  const fetchBookShelves = async () => {
-    fetch("http://localhost:8080/bookshelf/all", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setBookshelves(data.map((bookshelf) => bookshelf.name)))
-      .catch((error) => console.error("Error fetching bookshelves:", error));
-  };
-
-  const handleFilterChange = (name, checked) => {
-    setFilters((prevFilters) => {
-      const newFilters = { ...prevFilters };
-      if (authors.includes(name)) {
-        newFilters.authors = checked
-          ? [...newFilters.authors, name]
-          : newFilters.authors.filter((author) => author !== name);
-      } else if (bookshelves.includes(name)) {
-        newFilters.bookshelves = checked
-          ? [...newFilters.bookshelves, name]
-          : newFilters.bookshelves.filter((shelf) => shelf !== name);
-      }
-      return newFilters;
-    });
-  };
+  const {
+    user,
+    books,
+    filteredBooks,
+    authors,
+    bookshelves,
+    filters,
+    searchTerm,
+    modalMessage,
+    showMessageModal,
+    modalState,
+    setSearchTerm,
+    handleFilterChange,
+    handleCloseMessageModal,
+    handleBorrowBook,
+    editBookHandler,
+    addBookHandler,
+    handleCloseActionModal,
+  } = useBook();
 
   return (
     <div className="container">
@@ -100,14 +43,40 @@ const BookPage = () => {
         onFilterChange={handleFilterChange}
       />
       <div className="content">
-        <BookGrid
+        <Button
+          variant="contained"
+          className="add-button"
+          onClick={addBookHandler}
+        >
+          Add book
+        </Button>
+        <Books
           books={
-            filters.authors.length === 0 && filters.bookshelves.length === 0
+            filters.authors.length === 0 &&
+            filters.bookshelves.length === 0 &&
+            searchTerm === ""
               ? books
               : filteredBooks
           }
+          onClick={editBookHandler}
         />
       </div>
+      {showMessageModal && (
+        <Modal onClose={handleCloseMessageModal}>
+          <Typography variant="h6" className="title">
+            {modalMessage}
+          </Typography>
+        </Modal>
+      )}
+      {modalState.showing && user.role === "ADMIN" && (
+        <Modal onClose={handleCloseActionModal}>
+          <EditBookModal
+            mode={modalState.mode}
+            book={modalState.book}
+            onChange={handleCloseActionModal}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

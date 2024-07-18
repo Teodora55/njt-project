@@ -1,29 +1,12 @@
 import React from "react";
 import { Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
 
-const BookGrid = ({ books }) => {
-  const handleClick = async (id) => {
-    const url = new URL("http://localhost:8080/rental/borrow");
-    const response = await fetch(url, {
-      method: "POST",
-      body: id,
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      credentials: "include",
-    });
-
-    if (response.ok) {
-      // const data = await response.json();
-    } else {
-    }
-  };
-
+const Books = ({ books, onClick }) => {
   return (
     <Grid container spacing={3} className="book-grid">
       {books.map((book) => (
         <Grid item key={book.id} xs={6} sm={4} md={3} className="book-block">
-          <Card onClick={() => handleClick(book.id)}>
+          <Card onClick={() => onClick(book.id)}>
             <CardMedia
               component="img"
               alt={book.name}
@@ -48,4 +31,4 @@ const BookGrid = ({ books }) => {
   );
 };
 
-export default BookGrid;
+export default Books;

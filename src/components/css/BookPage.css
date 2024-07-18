@@ -26,6 +26,10 @@
   flex-direction: column;
 }
 
+.add-button {
+  margin-bottom: 16px !important;
+}
+
 .search-bar {
   width: 100%;
   padding: 10px;
@@ -42,6 +46,10 @@
 
 .book-block {
   margin-bottom: 20px;
+}
+
+.book-block:hover {
+  transform: scale(1.05);
 }
 
 .book-name {

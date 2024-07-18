@@ -1,100 +1,25 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import {
   Autocomplete,
   Box,
   Button,
   Chip,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
+import useBookModal from "../hooks/BookModalHook";
 
 const EditBookModal = (props) => {
-  const [book, setBook] = useState(props.book);
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [allAuthors, setAllAuthors] = useState([]);
-  const [matchingAuthors, setMatchingAuthors] = useState([]);
-
-  useEffect(() => {
-    if (searchTerm) {
-      setMatchingAuthors(
-        allAuthors.filter(
-          (author) =>
-            !book.author.map((a) => a.id).includes(author.id) &&
-            (author.firstname
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase()) ||
-              author.lastname.toLowerCase().includes(searchTerm.toLowerCase()))
-        )
-      );
-    } else {
-      setMatchingAuthors([]);
-    }
-  }, [searchTerm]);
-
-  const handleAuthorChange = (event, value) => {
-    setBook((prev) => ({
-      ...prev,
-      author: value,
-    }));
-  };
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    if (props.mode === "edit") editBookHandler();
-    else if (props.mode === "add") addBookHandler();
-  };
-
-  const editBookHandler = async () => {
-    const response = await fetch("http://localhost:8080/book/" + book.id, {
-      method: "PUT",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(book),
-      credentials: "include",
-    });
-    if (response.ok) {
-      props.onChange();
-    }
-  };
-
-  const addBookHandler = async () => {
-    const response = await fetch("http://localhost:8080/book", {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(book),
-      credentials: "include",
-    });
-    if (response.ok) {
-      props.onChange();
-    }
-  };
-
-  const loadAuthors = async () => {
-    const response = await fetch("http://localhost:8080/author/all", {
-      credentials: "include",
-    });
-    const data = await response.json();
-    for (const key in data) {
-      const author = {
-        id: data[key].id,
-        firstname: data[key].firstname,
-        lastname: data[key].lastname,
-      };
-      setAllAuthors((prev) => [...prev, author]);
-    }
-  };
-
-  useEffect(() => {
-    loadAuthors();
-  }, [book]);
+  const {
+    book,
+    matchingAuthorsAndBookshelfs,
+    setSearchAuthor,
+    setSearchBookshelf,
+    handleAuthorChange,
+    handleBookshelfChange,
+    submitHandler,
+    setBook,
+  } = useBookModal(props.book, props.mode, props.onChange);
 
   return (
     <div>
@@ -117,7 +42,7 @@ const EditBookModal = (props) => {
         <Box sx={{ width: 500 }} className="modal-element">
           <Autocomplete
             multiple
-            options={matchingAuthors}
+            options={matchingAuthorsAndBookshelfs.authors}
             getOptionLabel={(option) =>
               option.lastname + " " + option.firstname
             }
@@ -130,7 +55,7 @@ const EditBookModal = (props) => {
                 variant="outlined"
                 label="Search for an author"
                 placeholder="Type to search"
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchAuthor(e.target.value)}
               />
             )}
             renderTags={(value, getTagProps) =>
@@ -144,30 +69,34 @@ const EditBookModal = (props) => {
             }
           />
         </Box>
-        <FormControl
-          fullWidth
-          sx={{ marginBottom: "16px" }}
-          className="modal-element"
-        >
-          <InputLabel id="genre-label">Book Genre</InputLabel>
-          <Select
-            labelId="genre-label"
-            value={book.genre}
-            onChange={(e) =>
-              setBook((prev) => ({ ...prev, genre: e.target.value }))
+        <Box sx={{ width: 500 }} className="modal-element">
+          <Autocomplete
+            multiple
+            options={matchingAuthorsAndBookshelfs.bookshelves}
+            getOptionLabel={(option) => option.name}
+            value={book.bookshelves}
+            onChange={handleBookshelfChange}
+            filterSelectedOptions
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Search for an bookshelf"
+                placeholder="Type to search"
+                onChange={(e) => setSearchBookshelf(e.target.value)}
+              />
+            )}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  key={option.id}
+                  label={option.name}
+                  {...getTagProps({ index })}
+                />
+              ))
             }
-            label="Book Genre"
-          >
-            <MenuItem value="ADVENTURE">Adventure</MenuItem>
-            <MenuItem value="COMEDY">Comedy</MenuItem>
-            <MenuItem value="HORROR">Horror</MenuItem>
-            <MenuItem value="ACTION">Action</MenuItem>
-            <MenuItem value="BIOGRAPHY">Biography</MenuItem>
-            <MenuItem value="CLASSIC">Classic</MenuItem>
-            <MenuItem value="FANTASY">Fantasy</MenuItem>
-            <MenuItem value="CRIME">Crime</MenuItem>
-          </Select>
-        </FormControl>
+          />
+        </Box>
         <div>
           {props.mode === "add" && (
             <Button
