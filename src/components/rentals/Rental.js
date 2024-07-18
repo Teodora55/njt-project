@@ -3,19 +3,23 @@ import { Button, TableCell, TableRow } from "@mui/material";
 const Rental = ({ rental, onReturnBook, onExtendReturningDate }) => {
   return (
     <TableRow>
-      <TableCell>{rental.name}</TableCell>
-      <TableCell>{rental.author.map((a) => a + "\n")}</TableCell>
-      <TableCell>{rental.borrowed}</TableCell>
+      <TableCell>{rental.bookCopy.book.name}</TableCell>
+      <TableCell>
+        {rental.bookCopy.book.authors.map(
+          (a) => `${a.firstname} ${a.lastname}\n`
+        )}
+      </TableCell>
+      <TableCell>{rental.bookCopy.book.borrowedAt}</TableCell>
       <TableCell>{rental.returnBy}</TableCell>
       <TableCell>
-        {rental.returned === null ? "Not yet" : rental.returned}
+        {rental.returnedAt === null ? "Not yet" : rental.returnedAt}
       </TableCell>
       <TableCell>
         <Button
           onClick={onReturnBook}
           variant="contained"
           color="info"
-          disabled={rental.returned !== null}
+          disabled={rental.returnedAt !== null}
         >
           Return
         </Button>
@@ -25,7 +29,7 @@ const Rental = ({ rental, onReturnBook, onExtendReturningDate }) => {
           onClick={onExtendReturningDate}
           variant="contained"
           color="error"
-          disabled={rental.returned !== null}
+          disabled={rental.returnedAt !== null}
         >
           Extend returning date
         </Button>

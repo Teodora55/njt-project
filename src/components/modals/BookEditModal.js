@@ -46,7 +46,7 @@ const EditBookModal = (props) => {
             getOptionLabel={(option) =>
               option.lastname + " " + option.firstname
             }
-            value={book.author}
+            value={book.authors}
             onChange={handleAuthorChange}
             filterSelectedOptions
             renderInput={(params) => (

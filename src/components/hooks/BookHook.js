@@ -54,7 +54,7 @@ const useBook = () => {
     setFilteredBooks(
       books.filter((book) => {
         return (
-          book.author.some((bookAuthor) =>
+          book.authors.some((bookAuthor) =>
             filters.authors.includes(
               bookAuthor.firstname + " " + bookAuthor.lastname
             )
@@ -70,34 +70,41 @@ const useBook = () => {
   }, [books, filters, searchTerm]);
 
   const fetchBooks = async () => {
-    fetch("http://localhost:8080/book/all", {
+    const response = await fetch("http://localhost:8080/book/all", {
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setBooks(data))
-      .catch((error) => console.error("Error fetching books:", error));
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setBooks(data);
+    } else {
+      console.error("Error fetching books");
+    }
   };
 
   const fetchAuthors = async () => {
-    fetch("http://localhost:8080/author/all", {
+    const response = await fetch("http://localhost:8080/author/all", {
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) =>
-        setAuthors(
-          data.map((author) => author.firstname + " " + author.lastname)
-        )
-      )
-      .catch((error) => console.error("Error fetching authors:", error));
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setAuthors(
+        data.map((author) => author.firstname + " " + author.lastname)
+      );
+    } else {
+      console.error("Error fetching books");
+    }
   };
 
   const fetchBookShelves = async () => {
-    fetch("http://localhost:8080/bookshelf/all", {
+    const response = await fetch("http://localhost:8080/bookshelf/all", {
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setBookshelves(data.map((bookshelf) => bookshelf.name)))
-      .catch((error) => console.error("Error fetching bookshelves:", error));
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setBookshelves(data.map((bookshelf) => bookshelf.name));
+    } else {
+      console.error("Error fetching books");
+    }
   };
 
   const handleFilterChange = (name, checked) => {

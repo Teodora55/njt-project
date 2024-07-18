@@ -44,7 +44,7 @@ const RentalsTable = () => {
       const data = await response.json();
       setRentals((prev) => {
         return prev.map((el) => {
-          return el.id === id ? { ...el, returned: data.returned } : el;
+          return el.id === id ? { ...el, returnedAt: data.returnedAt } : el;
         });
       });
     }

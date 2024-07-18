@@ -14,15 +14,15 @@ const AccountSummery = () => {
           </Typography>
           <Box className="info-field">
             <Typography variant="subtitle1">Firstname: </Typography>
-            <Typography variant="body1">{user.firstname}</Typography>
+            <Typography variant="body1">{user.customer.firstname}</Typography>
           </Box>
           <Box className="info-field">
             <Typography variant="subtitle1">Lastname: </Typography>
-            <Typography variant="body1">{user.lastname}</Typography>
+            <Typography variant="body1">{user.customer.lastname}</Typography>
           </Box>
           <Box className="info-field">
             <Typography variant="subtitle1">Email: </Typography>
-            <Typography variant="body1">{user.email}</Typography>
+            <Typography variant="body1">{user.customer.email}</Typography>
           </Box>
         </Grid>
       </Grid>

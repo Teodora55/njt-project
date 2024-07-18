@@ -50,8 +50,8 @@ const useBookModal = (initialBook, mode, onChange) => {
         ...prev,
         authors: allAuthorsAndBookshelfs.authors.filter(
           (author) =>
-            (!book.author ||
-              !book.author.map((a) => a.id).includes(author.id)) &&
+            (!book.authors ||
+              !book.authors.map((a) => a.id).includes(author.id)) &&
             (author.firstname
               .toLowerCase()
               .includes(searchAuthor.toLowerCase()) ||
@@ -66,7 +66,7 @@ const useBookModal = (initialBook, mode, onChange) => {
         authors: [],
       }));
     }
-  }, [searchAuthor, allAuthorsAndBookshelfs, book.author]);
+  }, [searchAuthor, allAuthorsAndBookshelfs, book.authors]);
 
   useEffect(() => {
     if (searchBookshelf) {
@@ -90,7 +90,7 @@ const useBookModal = (initialBook, mode, onChange) => {
   const handleAuthorChange = (event, value) => {
     setBook((prev) => ({
       ...prev,
-      author: value,
+      authors: value,
     }));
   };
 

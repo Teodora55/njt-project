@@ -56,16 +56,16 @@ const AccountInfo = ({ onChangeToPaymentPage }) => {
             />
             <TextField
               name="firstname"
-              label="First Name"
-              value={user.firstname}
+              label="Firstname"
+              value={user.customer.firstname}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
             />
             <TextField
               name="lastname"
-              label="Last Name"
-              value={user.lastname}
+              label="Lastname"
+              value={user.customer.lastname}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
@@ -73,7 +73,7 @@ const AccountInfo = ({ onChangeToPaymentPage }) => {
             <TextField
               name="email"
               label="Email"
-              value={user.email}
+              value={user.customer.email}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
@@ -81,7 +81,7 @@ const AccountInfo = ({ onChangeToPaymentPage }) => {
             <TextField
               name="jmbg"
               label="JMBG"
-              value={user.jmbg}
+              value={user.customer.jmbg}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
