@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 const useBookModal = (initialBook, mode, onChange) => {
   const [book, setBook] = useState(initialBook);
+  const [file, setFile] = useState(null);
   const [searchAuthor, setSearchAuthor] = useState("");
   const [searchBookshelf, setSearchBookshelf] = useState("");
   const [allAuthorsAndBookshelfs, setAllAuthorsAndBookshelfs] = useState({
@@ -101,8 +102,12 @@ const useBookModal = (initialBook, mode, onChange) => {
     }));
   };
 
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
   const editBookHandler = async () => {
-    const response = await fetch("http://localhost:8080/book/" + book.id, {
+    const response = await fetch(`http://localhost:8080/book/${book.id}`, {
       method: "PUT",
       headers: new Headers({
         "Content-Type": "application/json",
@@ -111,6 +116,7 @@ const useBookModal = (initialBook, mode, onChange) => {
       credentials: "include",
     });
     if (response.ok) {
+      if (file) uploadBookCover();
       onChange();
     }
   };
@@ -125,7 +131,25 @@ const useBookModal = (initialBook, mode, onChange) => {
       credentials: "include",
     });
     if (response.ok) {
+      if (file) uploadBookCover();
       onChange();
+    }
+  };
+
+  const uploadBookCover = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(
+      `http://localhost:8080/book/cover/${book.id}`,
+      {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
     }
   };
 
@@ -144,6 +168,7 @@ const useBookModal = (initialBook, mode, onChange) => {
     setSearchBookshelf,
     handleAuthorChange,
     handleBookshelfChange,
+    handleFileChange,
     submitHandler,
     setBook,
   };

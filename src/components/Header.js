@@ -84,16 +84,20 @@ const Header = (props) => {
               Customers
             </Button>
           )}
-          <Button color="inherit" onClick={props.onChangeToRentalPage}>
-            Book Rentals
-          </Button>
-          <Button
-            color="inherit"
-            startIcon={<AccountCircleIcon />}
-            onClick={props.onChangeToAccountPage}
-          >
-            My Account
-          </Button>
+          {user && user.role === "USER" && (
+            <Box>
+              <Button color="inherit" onClick={props.onChangeToRentalPage}>
+                Book Rentals
+              </Button>
+              <Button
+                color="inherit"
+                startIcon={<AccountCircleIcon />}
+                onClick={props.onChangeToAccountPage}
+              >
+                My Account
+              </Button>
+            </Box>
+          )}
           <IconButton color="inherit" onClick={handleOpenModal}>
             <Badge badgeContent={unreadCount} color="error">
               <NotificationsIcon />

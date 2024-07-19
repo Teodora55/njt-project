@@ -60,7 +60,7 @@ const AccountRentals = () => {
         </Table>
       </TableContainer>
       <Typography variant="body2" className="date-text">
-        {"Date: " + format(new Date(), "dd.mm.yyyy")}
+        {"Date: " + format(new Date(), "dd.MM.yyyy")}
       </Typography>
     </Box>
   );

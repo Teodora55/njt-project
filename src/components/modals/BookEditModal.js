@@ -17,6 +17,7 @@ const EditBookModal = (props) => {
     setSearchBookshelf,
     handleAuthorChange,
     handleBookshelfChange,
+    handleFileChange,
     submitHandler,
     setBook,
   } = useBookModal(props.book, props.mode, props.onChange);
@@ -97,6 +98,10 @@ const EditBookModal = (props) => {
             }
           />
         </Box>
+        <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
+          Upload Book Cover
+          <input type="file" hidden onChange={handleFileChange} />
+        </Button>
         <div>
           {props.mode === "add" && (
             <Button

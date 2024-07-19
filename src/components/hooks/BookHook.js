@@ -41,6 +41,10 @@ const useBook = () => {
     showing: false,
     book: {},
   });
+  const [availableToRent, setAvailableToRent] = useState({
+    message: "",
+    available: false,
+  });
 
   const { user } = useContext(UserContext);
 
@@ -132,29 +136,57 @@ const useBook = () => {
     dispatchModal({ type: "SHOW_EDIT_MODAL", book: book });
   };
 
+  const bookToRentHandler = async (id) => {
+    const book = books.find((el) => {
+      return el.id === id;
+    });
+    setAvailableToRent({
+      available: false,
+      message: `Sorry, '${book.name}' is currently not available`,
+    });
+    const response = await fetch(
+      `http://localhost:8080/bookCopies/available/${id}`,
+      {
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      if (data > 0)
+        setAvailableToRent({
+          available: true,
+          message: `Do you want to rent '${book.name}'?`,
+        });
+      dispatchModal({ type: "SHOW_EDIT_MODAL", book: book });
+    }
+  };
+
   const addBookHandler = () => {
     dispatchModal({ type: "SHOW_ADD_MODAL" });
   };
 
-  const handleCloseActionModal = () => dispatchModal({ type: "CLOSE_MODAL" });
+  const handleCloseActionModal = () => {
+    dispatchModal({ type: "CLOSE_MODAL" });
+    fetchBooks();
+  };
 
-  const handleBorrowBook = async (id) => {
+  const handleBorrowBook = async () => {
     const url = new URL("http://localhost:8080/rental/borrow");
     const response = await fetch(url, {
       method: "POST",
-      body: id,
+      body: modalState.book.id,
       headers: new Headers({
         "Content-Type": "application/json",
       }),
       credentials: "include",
     });
-
-    if (response.ok) {
-      const data = await response.json();
-      setShowMessageModal(true);
-      setModalMessage(`'${data.name}' is successfully rented!`);
+    dispatchModal({ type: "CLOSE_MODAL" });
+    setShowMessageModal(true);
+    if (response.status === 200) {
+      setModalMessage(`'${modalState.book.name}' is successfully rented!`);
+    } else if (response.status === 208) {
+      setModalMessage(`You have already rented '${modalState.book.name}'!`);
     } else {
-      setShowMessageModal(true);
       setModalMessage(`There were problem renting book`);
     }
   };
@@ -170,11 +202,13 @@ const useBook = () => {
     modalMessage,
     showMessageModal,
     modalState,
+    availableToRent,
     setSearchTerm,
     handleFilterChange,
     handleCloseMessageModal,
     handleBorrowBook,
     editBookHandler,
+    bookToRentHandler,
     addBookHandler,
     handleCloseActionModal,
   };

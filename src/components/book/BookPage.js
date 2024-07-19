@@ -7,6 +7,7 @@ import useBook from "../hooks/BookHook";
 import "./../css/BookPage.css";
 import { Button, Typography } from "@mui/material";
 import EditBookModal from "../modals/BookEditModal";
+import RentBookModal from "../modals/RentBookModal";
 
 const BookPage = () => {
   const {
@@ -20,11 +21,13 @@ const BookPage = () => {
     modalMessage,
     showMessageModal,
     modalState,
+    availableToRent,
     setSearchTerm,
     handleFilterChange,
     handleCloseMessageModal,
     handleBorrowBook,
     editBookHandler,
+    bookToRentHandler,
     addBookHandler,
     handleCloseActionModal,
   } = useBook();
@@ -43,13 +46,15 @@ const BookPage = () => {
         onFilterChange={handleFilterChange}
       />
       <div className="content">
-        <Button
-          variant="contained"
-          className="add-button"
-          onClick={addBookHandler}
-        >
-          Add book
-        </Button>
+        {user.role === "ADMIN" && (
+          <Button
+            variant="contained"
+            className="add-button"
+            onClick={addBookHandler}
+          >
+            Add book
+          </Button>
+        )}
         <Books
           books={
             filters.authors.length === 0 &&
@@ -58,7 +63,7 @@ const BookPage = () => {
               ? books
               : filteredBooks
           }
-          onClick={editBookHandler}
+          onClick={user.role === "ADMIN" ? editBookHandler : bookToRentHandler}
         />
       </div>
       {showMessageModal && (
@@ -74,6 +79,15 @@ const BookPage = () => {
             mode={modalState.mode}
             book={modalState.book}
             onChange={handleCloseActionModal}
+          />
+        </Modal>
+      )}
+      {modalState.showing && user.role === "USER" && (
+        <Modal onClose={handleCloseActionModal}>
+          <RentBookModal
+            message={availableToRent.message}
+            availableRent={availableToRent.available}
+            handleRent={handleBorrowBook}
           />
         </Modal>
       )}

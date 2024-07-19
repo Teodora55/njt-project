@@ -11,7 +11,11 @@ const Books = ({ books, onClick }) => {
               component="img"
               alt={book.name}
               height="140"
-              image={book.coverUrl}
+              image={
+                book.coverUrl.startsWith("http")
+                  ? book.coverUrl
+                  : `http://localhost:8080/book/cover/${book.coverUrl}`
+              }
               title={book.name}
             />
             <CardContent>
