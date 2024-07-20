@@ -12,8 +12,8 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import "./css/PaymentPage.css";
-import { UserContext } from "../context/UserContext";
+import "./../css/PaymentPage.css";
+import { UserContext } from "../../context/UserContext";
 
 const PaymentPage = (props) => {
   const [error, setError] = useState(null);

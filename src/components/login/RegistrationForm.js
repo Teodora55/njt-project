@@ -9,7 +9,7 @@ import {
   Link,
   Grid,
 } from "@mui/material";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 
 const RegistrationForm = (props) => {
   const [newUser, setNewUser] = useState({

@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import CustomersTable from "./components/customer/CustomersTable.js";
-import Header from "./components/Header";
+import Header from "./components/UI/Header";
 import RentalsTable from "./components/rentals/RentalsTable.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import RegistrationForm from "./components/RegistrationForm.js";
-import LoginForm from "./components/LoginForm.js";
+import RegistrationForm from "./components/login/RegistrationForm.js";
+import LoginForm from "./components/login/LoginForm.js";
 import { UserContext } from "./context/UserContext.js";
 import BookPage from "./components/book/BookPage.js";
-import PaymentPage from "./components/PaymentPage.js";
+import PaymentPage from "./components/payment/PaymentPage.js";
 import MyAccount from "./components/account/MyAccount.js";
 import { Box, CircularProgress } from "@mui/material";
+import ReadBooksPage from "./components/read/ReadBookPage.js";
 
 function App() {
   const [page, setPage] = useState("");
@@ -55,6 +56,10 @@ function App() {
     setPage("account");
   };
 
+  const readingHandler = () => {
+    setPage("read");
+  };
+
   if (loading) {
     return (
       <Box
@@ -79,6 +84,7 @@ function App() {
           onChangeToCustomerPage={customerHandler}
           onChangeToAccountPage={accountHandler}
           onChangeToLoginPage={loginHandler}
+          onChangeToReadingPage={readingHandler}
         />
       )}
       {page === "" && (
@@ -106,6 +112,7 @@ function App() {
       {page === "account" && (
         <MyAccount onChangeToPaymentPage={paymentHandler} />
       )}
+      {page === "read" && <ReadBooksPage />}
     </>
   );
 }

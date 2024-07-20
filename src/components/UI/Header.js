@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -8,11 +8,12 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
-import "./css/Header.css";
-import Modal from "./modals/Modal";
-import NotificationModal from "./modals/NotificationModal";
+import "./../css/Header.css";
+import Modal from "../modals/Modal";
+import NotificationModal from "../modals/NotificationModal";
 import { Badge } from "@mui/material";
 
 const Header = (props) => {
@@ -98,6 +99,13 @@ const Header = (props) => {
               </Button>
             </Box>
           )}
+          <Button
+            color="inherit"
+            startIcon={<AutoStoriesOutlinedIcon />}
+            onClick={props.onChangeToReadingPage}
+          >
+            Read
+          </Button>
           <IconButton color="inherit" onClick={handleOpenModal}>
             <Badge badgeContent={unreadCount} color="error">
               <NotificationsIcon />
