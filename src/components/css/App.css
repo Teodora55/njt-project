@@ -1,0 +1,31 @@
+html,
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.load {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+  height: "100vh";
+}
+
+*::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 10px; /* Round the scrollbar handle */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color when hovering over the scrollbar handle */
+}

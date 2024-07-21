@@ -1,33 +1,43 @@
 .container {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-  margin: 0px 50px;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  height: calc(100vh - 72px) !important;
 }
 
 .search-bar-container {
-  grid-column: 1 / -1;
-  padding: 20px 0px;
+  padding: 20px;
   background-color: white;
 }
 
-.sidebar {
-  grid-row: 2 / -1;
-  padding: 20px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
+.content {
+  display: flex;
+  overflow: hidden;
 }
 
-.content {
-  grid-row: 2 / -1;
+.sidebar {
+  width: 120%;
+  overflow-y: auto;
+  background-color: #f4f4f4;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.books {
+  padding: 20px;
+  overflow-y: auto;
+  width: 1000vh;
 }
 
 .add-button {
-  margin-bottom: 16px !important;
+  margin: 0px 24px 32px 0px !important;
+  padding: 12px !important;
+  font-size: 16px !important;
+  float: right;
+}
+
+.option {
+  margin-bottom: 12px !important;
 }
 
 .search-bar {
@@ -39,13 +49,14 @@
 }
 
 .book-grid {
-  display: flex;
-  flex-wrap: wrap;
   gap: 20px;
+  justify-content: space-evenly;
 }
 
-.book-block {
-  margin-bottom: 20px;
+.book-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .book-block:hover {
@@ -54,8 +65,6 @@
 
 .book-name {
   text-align: center;
-}
-
-.filter-group {
-  margin-bottom: 20px;
+  font-family: "Georgia" !important;
+  font-size: 24px !important;
 }

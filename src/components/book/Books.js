@@ -6,11 +6,10 @@ const Books = ({ books, onClick }) => {
     <Grid container spacing={3} className="book-grid">
       {books.map((book) => (
         <Grid item key={book.id} xs={6} sm={4} md={3} className="book-block">
-          <Card onClick={() => onClick(book.id)}>
+          <Card onClick={() => onClick(book.id)} className="book-card">
             <CardMedia
               component="img"
               alt={book.name}
-              height="140"
               image={
                 book.coverUrl.startsWith("http")
                   ? book.coverUrl

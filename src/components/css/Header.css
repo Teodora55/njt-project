@@ -1,12 +1,27 @@
 .appBar {
-  background-color: #333;
+  background-color: #333 !important;
   box-shadow: none;
 }
 
 .menuButton {
-  margin-right: 16px;
+  margin-right: 8px !important;
+  width: 72px;
 }
 
 .title {
   flex-grow: 1;
+  font-family: "Brush Script MT" !important;
+  font-size: 40px !important;
+}
+
+.options {
+  display: flex;
+  flex-direction: row !important;
+  flex-grow: 6;
+  justify-content: space-between !important;
+  align-items: center;
+}
+
+.options > * {
+  margin-left: 16px;
 }

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Chip,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Box, Button, Chip, TextField } from "@mui/material";
 import useBookModal from "../hooks/BookModalHook";
 
 const EditBookModal = (props) => {
@@ -23,12 +16,9 @@ const EditBookModal = (props) => {
   } = useBookModal(props.book, props.mode, props.onChange);
 
   return (
-    <div>
+    <Box className="modal-body">
       <form onSubmit={submitHandler}>
         <input type="hidden" name="id" value={book.id} />
-        <Typography variant="h6" className="modal-element">
-          Book Information
-        </Typography>
         <TextField
           variant="outlined"
           label="Book Name"
@@ -38,9 +28,8 @@ const EditBookModal = (props) => {
             setBook((prev) => ({ ...prev, name: e.target.value }))
           }
           fullWidth
-          sx={{ marginBottom: "16px" }}
         />
-        <Box sx={{ width: 500 }} className="modal-element">
+        <Box className="modal-element">
           <Autocomplete
             multiple
             options={matchingAuthorsAndBookshelfs.authors}
@@ -70,7 +59,7 @@ const EditBookModal = (props) => {
             }
           />
         </Box>
-        <Box sx={{ width: 500 }} className="modal-element">
+        <Box className="modal-element">
           <Autocomplete
             multiple
             options={matchingAuthorsAndBookshelfs.bookshelves}
@@ -98,19 +87,24 @@ const EditBookModal = (props) => {
             }
           />
         </Box>
-        <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
+        <Button
+          variant="contained"
+          component="label"
+          fullWidth
+          className="modal-element"
+        >
           Upload Book Cover
           <input type="file" hidden onChange={handleFileChange} />
         </Button>
-        <div>
+        <Box>
           {props.mode === "add" && (
             <Button
               type="submit"
               variant="contained"
-              color="primary"
+              color="secondary"
+              fullWidth
               className="modal-element"
               id="add"
-              sx={{ marginTop: "16px" }}
             >
               Add
             </Button>
@@ -120,16 +114,16 @@ const EditBookModal = (props) => {
               type="submit"
               variant="contained"
               color="warning"
+              fullWidth
               className="modal-element"
               id="edit"
-              sx={{ marginTop: "16px" }}
             >
               Edit
             </Button>
           )}
-        </div>
+        </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 

@@ -5,16 +5,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
-import "./../css/Header.css";
 import Modal from "../modals/Modal";
 import NotificationModal from "../modals/NotificationModal";
 import { Badge } from "@mui/material";
+import logo from "./../../images/LibraryLogo.jpg";
+import "./../css/Header.css";
 
 const Header = (props) => {
   const { user, setUser, setLogin } = useContext(UserContext);
@@ -71,12 +71,12 @@ const Header = (props) => {
           aria-label="menu"
           className="menuButton"
         >
-          <MenuIcon />
+          <img src={logo} alt="Library Logo" className="library-logo" />
         </IconButton>
         <Typography variant="h6" className="title">
-          My Bookshop
+          Fabulous Books...
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box className="options">
           <Button color="inherit" onClick={props.onChangeToBookPage}>
             Books
           </Button>
@@ -86,18 +86,18 @@ const Header = (props) => {
             </Button>
           )}
           {user && user.role === "USER" && (
-            <Box>
-              <Button color="inherit" onClick={props.onChangeToRentalPage}>
-                Book Rentals
-              </Button>
-              <Button
-                color="inherit"
-                startIcon={<AccountCircleIcon />}
-                onClick={props.onChangeToAccountPage}
-              >
-                My Account
-              </Button>
-            </Box>
+            <Button color="inherit" onClick={props.onChangeToRentalPage}>
+              Book Rentals
+            </Button>
+          )}
+          {user && user.role === "USER" && (
+            <Button
+              color="inherit"
+              startIcon={<AccountCircleIcon />}
+              onClick={props.onChangeToAccountPage}
+            >
+              My Account
+            </Button>
           )}
           <Button
             color="inherit"
@@ -106,11 +106,17 @@ const Header = (props) => {
           >
             Read
           </Button>
-          <IconButton color="inherit" onClick={handleOpenModal}>
-            <Badge badgeContent={unreadCount} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Button
+            color="inherit"
+            onClick={handleOpenModal}
+            startIcon={
+              <Badge badgeContent={unreadCount} color="error">
+                <NotificationsIcon />
+              </Badge>
+            }
+          >
+            Notifications
+          </Button>
           <Button
             color="inherit"
             startIcon={<LogoutIcon />}

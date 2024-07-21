@@ -3,20 +3,19 @@ import { Box, Typography, Button } from "@mui/material";
 
 const RentBookModal = ({ message, availableRent, handleRent }) => {
   return (
-    <Box>
-      <Typography variant="h6" component="h2">
+    <Box className="modal-body">
+      <Typography variant="h6" component="h2" className="modal-element">
         {message}
       </Typography>
-      <Box mt={2} display="flex" justifyContent="flex-end">
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!availableRent}
-          onClick={handleRent}
-        >
-          Rent
-        </Button>
-      </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        className="modal-element"
+        disabled={!availableRent}
+        onClick={handleRent}
+      >
+        Rent
+      </Button>
     </Box>
   );
 };

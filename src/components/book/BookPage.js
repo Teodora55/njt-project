@@ -5,7 +5,7 @@ import SearchBar from "../UI/SearchBar";
 import Modal from "../modals/Modal";
 import useBook from "../hooks/BookHook";
 import "./../css/BookPage.css";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import EditBookModal from "../modals/BookEditModal";
 import RentBookModal from "../modals/RentBookModal";
 
@@ -33,42 +33,46 @@ const BookPage = () => {
   } = useBook();
 
   return (
-    <div className="container">
-      <div className="search-bar-container">
+    <Box className="container">
+      <Box className="search-bar-container">
         <SearchBar
           searchTerm={searchTerm}
           onSearchChange={(event) => setSearchTerm(event.target.value)}
         />
-      </div>
-      <BookFilter
-        authors={authors}
-        bookshelves={bookshelves}
-        onFilterChange={handleFilterChange}
-      />
-      <div className="content">
-        {user.role === "ADMIN" && (
-          <Button
-            variant="contained"
-            className="add-button"
-            onClick={addBookHandler}
-          >
-            Add book
-          </Button>
-        )}
-        <Books
-          books={
-            filters.authors.length === 0 &&
-            filters.bookshelves.length === 0 &&
-            searchTerm === ""
-              ? books
-              : filteredBooks
-          }
-          onClick={user.role === "ADMIN" ? editBookHandler : bookToRentHandler}
+      </Box>
+      <Box className="content">
+        <BookFilter
+          authors={authors}
+          bookshelves={bookshelves}
+          onFilterChange={handleFilterChange}
         />
-      </div>
+        <Box className="books">
+          {user.role === "ADMIN" && (
+            <Button
+              variant="contained"
+              className="add-button"
+              onClick={addBookHandler}
+            >
+              Add book
+            </Button>
+          )}
+          <Books
+            books={
+              filters.authors.length === 0 &&
+              filters.bookshelves.length === 0 &&
+              searchTerm === ""
+                ? books
+                : filteredBooks
+            }
+            onClick={
+              user.role === "ADMIN" ? editBookHandler : bookToRentHandler
+            }
+          />
+        </Box>
+      </Box>
       {showMessageModal && (
         <Modal onClose={handleCloseMessageModal}>
-          <Typography variant="h6" className="title">
+          <Typography variant="h6" className="message">
             {modalMessage}
           </Typography>
         </Modal>
@@ -91,7 +95,7 @@ const BookPage = () => {
           />
         </Modal>
       )}
-    </div>
+    </Box>
   );
 };
 

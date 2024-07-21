@@ -11,6 +11,8 @@ import PaymentPage from "./components/payment/PaymentPage.js";
 import MyAccount from "./components/account/MyAccount.js";
 import { Box, CircularProgress } from "@mui/material";
 import ReadBooksPage from "./components/read/ReadBookPage.js";
+import "./components/css/App.css";
+import "./components/css/ModalContent.css";
 
 function App() {
   const [page, setPage] = useState("");
@@ -62,14 +64,7 @@ function App() {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
+      <Box className="load">
         <CircularProgress />
       </Box>
     );
@@ -87,32 +82,34 @@ function App() {
           onChangeToReadingPage={readingHandler}
         />
       )}
-      {page === "" && (
-        <LoginForm
-          onRegistration={registerHandler}
-          onChangeToBookPage={bookHandler}
-          onChangeToPaymentPage={paymentHandler}
-        />
-      )}
-      {page === "register" && (
-        <RegistrationForm
-          onLogin={loginHandler}
-          onChangeToBookPage={bookHandler}
-        />
-      )}
-      {page === "books" && <BookPage />}
-      {page === "rentals" && <RentalsTable />}
-      {page === "customers" && <CustomersTable />}
-      {page === "payment" && (
-        <PaymentPage
-          onChangeToLoginPage={loginHandler}
-          onChangeToAccountPage={accountHandler}
-        />
-      )}
-      {page === "account" && (
-        <MyAccount onChangeToPaymentPage={paymentHandler} />
-      )}
-      {page === "read" && <ReadBooksPage />}
+      <Box className="page-content">
+        {page === "" && (
+          <LoginForm
+            onRegistration={registerHandler}
+            onChangeToBookPage={bookHandler}
+            onChangeToPaymentPage={paymentHandler}
+          />
+        )}
+        {page === "register" && (
+          <RegistrationForm
+            onLogin={loginHandler}
+            onChangeToBookPage={bookHandler}
+          />
+        )}
+        {page === "books" && <BookPage />}
+        {page === "rentals" && <RentalsTable />}
+        {page === "customers" && <CustomersTable />}
+        {page === "payment" && (
+          <PaymentPage
+            onChangeToLoginPage={loginHandler}
+            onChangeToAccountPage={accountHandler}
+          />
+        )}
+        {page === "account" && (
+          <MyAccount onChangeToPaymentPage={paymentHandler} />
+        )}
+        {page === "read" && <ReadBooksPage />}
+      </Box>
     </>
   );
 }
