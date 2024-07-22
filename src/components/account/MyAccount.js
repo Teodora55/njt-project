@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import AccountInfo from "./AccountInfo";
 import AccountRentals from "./AccountRentals";
 import html2canvas from "html2canvas";
@@ -44,11 +44,11 @@ const MyAccount = ({ onChangeToPaymentPage }) => {
         <AccountInfo onChangeToPaymentPage={onChangeToPaymentPage} />
       </Grid>
       <Grid item xs={16} md={8}>
-        <div ref={rentalsRef}>
+        <Box ref={rentalsRef}>
           <LibraryInfo />
           <AccountSummery />
           <AccountRentals />
-        </div>
+        </Box>
         <Button
           variant="contained"
           color="primary"

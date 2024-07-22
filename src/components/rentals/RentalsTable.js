@@ -5,8 +5,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Box,
 } from "@mui/material";
 import Rental from "./Rental";
+import "./../css/Rentals.css";
 
 const RentalsTable = () => {
   const [rentals, setRentals] = useState([]);
@@ -70,33 +72,35 @@ const RentalsTable = () => {
   };
 
   return (
-    <Table className="table">
-      <TableHead>
-        <TableRow>
-          <TableCell scope="col">Book</TableCell>
-          <TableCell scope="col">Author</TableCell>
-          <TableCell scope="col">Borrowed</TableCell>
-          <TableCell scope="col">Return by</TableCell>
-          <TableCell scope="col">Returned</TableCell>
-          <TableCell />
-          <TableCell />
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rentals.map((rental) => (
-          <Rental
-            key={rental.id}
-            rental={rental}
-            onReturnBook={() => {
-              returnBookHandler(rental.id);
-            }}
-            onExtendReturningDate={() => {
-              extendReturningDateHandler(rental.id);
-            }}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <Box className="table-container">
+      <Table className="table">
+        <TableHead className="table-header">
+          <TableRow>
+            <TableCell scope="col">Book</TableCell>
+            <TableCell scope="col">Author</TableCell>
+            <TableCell scope="col">Borrowed</TableCell>
+            <TableCell scope="col">Return by</TableCell>
+            <TableCell scope="col">Returned</TableCell>
+            <TableCell />
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        <TableBody className="table-body">
+          {rentals.map((rental) => (
+            <Rental
+              key={rental.id}
+              rental={rental}
+              onReturnBook={() => {
+                returnBookHandler(rental.id);
+              }}
+              onExtendReturningDate={() => {
+                extendReturningDateHandler(rental.id);
+              }}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </Box>
   );
 };
 

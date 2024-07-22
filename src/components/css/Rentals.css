@@ -1,0 +1,30 @@
+.table-container {
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border: none;
+}
+
+.table-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.table-body {
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+.table td {
+  border: none;
+}
+
+.table tr {
+  height: 10vh;
+}

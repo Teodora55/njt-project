@@ -9,7 +9,7 @@ const Rental = ({ rental, onReturnBook, onExtendReturningDate }) => {
           (a) => `${a.firstname} ${a.lastname}\n`
         )}
       </TableCell>
-      <TableCell>{rental.bookCopy.book.borrowedAt}</TableCell>
+      <TableCell>{rental.borrowedAt}</TableCell>
       <TableCell>{rental.returnBy}</TableCell>
       <TableCell>
         {rental.returnedAt === null ? "Not yet" : rental.returnedAt}
