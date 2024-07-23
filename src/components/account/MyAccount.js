@@ -39,26 +39,28 @@ const MyAccount = ({ onChangeToPaymentPage }) => {
   };
 
   return (
-    <Grid container spacing={3} className="account-grid">
-      <Grid item xs={8} md={4}>
-        <AccountInfo onChangeToPaymentPage={onChangeToPaymentPage} />
+    <Box className="account-page">
+      <Grid container spacing={3} className="account-grid">
+        <Grid item xs={12} md={4}>
+          <AccountInfo onChangeToPaymentPage={onChangeToPaymentPage} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Box ref={rentalsRef}>
+            <LibraryInfo />
+            <AccountSummery />
+            <AccountRentals />
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            className="get-pdf-button"
+            onClick={handleGetPdf}
+          >
+            Get PDF
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item xs={16} md={8}>
-        <Box ref={rentalsRef}>
-          <LibraryInfo />
-          <AccountSummery />
-          <AccountRentals />
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          className="get-pdf-button"
-          onClick={handleGetPdf}
-        >
-          Get PDF
-        </Button>
-      </Grid>
-    </Grid>
+    </Box>
   );
 };
 

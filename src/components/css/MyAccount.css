@@ -1,8 +1,25 @@
-.account-paper {
-  padding: 32px;
-  height: 100%;
+.account-page {
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 72px) !important;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.account-grid {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.account-paper {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-container {
+  width: 100%;
+  padding: 20px;
 }
 
 .account-title {
@@ -12,6 +29,11 @@
 
 .section-title {
   margin-bottom: 16px !important;
+  font-family: "Georgia" !important;
+}
+
+.rentals-container {
+  padding: 0px 24px;
 }
 
 .field-container {
@@ -36,5 +58,9 @@
   .account-info-container,
   .rentals-container {
     width: 100%;
+  }
+
+  .section-title {
+    font-size: 1.5em;
   }
 }

@@ -1,0 +1,55 @@
+.ar-table {
+  width: 100%;
+}
+
+.ar-table th,
+.ar-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.ar-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.ar-table .title-col {
+  width: 40%;
+}
+
+.ar-table .author-col {
+  width: 20%;
+}
+
+.ar-table .borrowed-col,
+.ar-table .return-col,
+.ar-table .returned-col {
+  width: 13.33%;
+}
+
+.ar-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.ar-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.date-text {
+  margin-top: 20px;
+  text-align: right;
+  font-style: italic;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .ar-table th,
+  .ar-table td {
+    padding: 8px;
+  }
+
+  .date-text {
+    font-size: 0.9em;
+  }
+}

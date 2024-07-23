@@ -8,19 +8,19 @@ const LibraryInfo = () => {
       <Grid container spacing={2}>
         <Grid item xs={8}>
           <Typography variant="h5" className="section-title">
-            Library Information
+            Fabulous Books
           </Typography>
           <Box className="info-field">
             <Typography variant="subtitle1">Name: </Typography>
-            <Typography variant="body1">City Library</Typography>
+            <Typography variant="body1">Fabulous Books</Typography>
           </Box>
           <Box className="info-field">
             <Typography variant="subtitle1">Phone Number: </Typography>
-            <Typography variant="body1">123-456-7890</Typography>
+            <Typography variant="body1">+381645287639</Typography>
           </Box>
           <Box className="info-field">
             <Typography variant="subtitle1">Email: </Typography>
-            <Typography variant="body1">info@citylibrary.com</Typography>
+            <Typography variant="body1">fab.books123@gmail.com</Typography>
           </Box>
         </Grid>
         <Grid item xs={2}>

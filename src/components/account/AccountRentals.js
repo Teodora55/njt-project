@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import AccountRental from "./AccountRental";
+import "./../css/AccountRentals.css";
 
 const AccountRentals = () => {
   const [rentals, setRentals] = useState([]);
@@ -38,23 +39,20 @@ const AccountRentals = () => {
 
   return (
     <Box className="rentals-container">
-      <Typography variant="h4" className="section-title">
-        My Rentals
-      </Typography>
       <TableContainer component={Paper}>
-        <Table>
+        <Table className="ar-table">
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Author</TableCell>
-              <TableCell>Borrowed</TableCell>
-              <TableCell>Return by</TableCell>
-              <TableCell>Returned at</TableCell>
+              <TableCell className="title-col">Title</TableCell>
+              <TableCell className="author-col">Author</TableCell>
+              <TableCell className="borrowed-col">Borrowed</TableCell>
+              <TableCell className="return-col">Return by</TableCell>
+              <TableCell className="returned-col">Returned at</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rentals.map((rental) => (
-              <AccountRental rental={rental} />
+              <AccountRental key={rental.id} rental={rental} />
             ))}
           </TableBody>
         </Table>
