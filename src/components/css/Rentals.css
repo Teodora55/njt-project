@@ -9,14 +9,11 @@
   border: none;
 }
 
-.table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
 .table-header {
   position: sticky;
   top: 0;
+  background-color: #f4f4f4;
+  font-weight: bold;
   z-index: 1;
 }
 

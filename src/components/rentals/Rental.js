@@ -1,8 +1,8 @@
 import { Button, TableCell, TableRow } from "@mui/material";
 
-const Rental = ({ rental, onReturnBook, onExtendReturningDate }) => {
+const Rental = ({ rental, onReturnBook, onExtendReturningDate, onRead }) => {
   return (
-    <TableRow>
+    <TableRow onClick={onRead}>
       <TableCell>{rental.bookCopy.book.name}</TableCell>
       <TableCell>
         {rental.bookCopy.book.authors.map(

@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
 import Modal from "../modals/Modal";
@@ -99,13 +98,6 @@ const Header = (props) => {
               My Account
             </Button>
           )}
-          <Button
-            color="inherit"
-            startIcon={<AutoStoriesOutlinedIcon />}
-            onClick={props.onChangeToReadingPage}
-          >
-            Read
-          </Button>
           <Button
             color="inherit"
             onClick={handleOpenModal}

@@ -71,6 +71,11 @@ const RentalsTable = () => {
     }
   };
 
+  const handleReadBook = async (isbn) => {
+    const url = `http://localhost:8080/rental/read/${isbn}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <Box className="table-container">
       <Table className="table">
@@ -95,6 +100,9 @@ const RentalsTable = () => {
               }}
               onExtendReturningDate={() => {
                 extendReturningDateHandler(rental.id);
+              }}
+              onRead={() => {
+                handleReadBook(rental.bookCopy.isbn);
               }}
             />
           ))}

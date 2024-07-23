@@ -10,7 +10,6 @@ import BookPage from "./components/book/BookPage.js";
 import PaymentPage from "./components/payment/PaymentPage.js";
 import MyAccount from "./components/account/MyAccount.js";
 import { Box, CircularProgress } from "@mui/material";
-import ReadBooksPage from "./components/read/ReadBookPage.js";
 import "./components/css/App.css";
 import "./components/css/ModalContent.css";
 
@@ -58,10 +57,6 @@ function App() {
     setPage("account");
   };
 
-  const readingHandler = () => {
-    setPage("read");
-  };
-
   if (loading) {
     return (
       <Box className="load">
@@ -79,7 +74,6 @@ function App() {
           onChangeToCustomerPage={customerHandler}
           onChangeToAccountPage={accountHandler}
           onChangeToLoginPage={loginHandler}
-          onChangeToReadingPage={readingHandler}
         />
       )}
       <Box className="page-content">
@@ -108,7 +102,6 @@ function App() {
         {page === "account" && (
           <MyAccount onChangeToPaymentPage={paymentHandler} />
         )}
-        {page === "read" && <ReadBooksPage />}
       </Box>
     </>
   );
