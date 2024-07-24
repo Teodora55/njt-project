@@ -1,38 +1,63 @@
 .modal-body {
-  display: flex !important;
-  flex-direction: column !important;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-element {
   width: 500px;
+  max-width: 600px;
   margin-bottom: 12px !important;
-}
-
-.custom-divider {
-  width: 100%;
-  border-bottom: 2px solid black !important;
+  font-family: "Georgia" !important;
 }
 
 .notification-list-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px 0;
+  padding: 16px;
   cursor: pointer;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.notification-list-item:hover {
+  background-color: #f0f0f0;
 }
 
 .notification-title {
-  margin-bottom: 8px;
+  margin-bottom: 8px !important;
+  font-family: "Georgia" !important;
+  font-size: 24px !important;
 }
 
 .notification-divider {
   width: 100%;
-  border-bottom-width: 2px;
-  border-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .bold {
   font-weight: bold !important;
+}
+
+.read-more-button {
+  margin-left: 8px;
+  text-transform: none;
+  padding: 0;
+  min-height: 0;
+  min-width: 0;
+  background: none;
+  border: none;
+  color: #3f51b5;
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  text-decoration: underline;
 }

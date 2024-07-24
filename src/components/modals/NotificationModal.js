@@ -66,13 +66,7 @@ const NotificationModal = ({ notifications, openedNotifications }) => {
                     {notification.message.length > 60 && (
                       <Button
                         onClick={() => toggleExpand(notification.id)}
-                        sx={{
-                          marginLeft: "8px",
-                          textTransform: "none",
-                          padding: 0,
-                          minHeight: 0,
-                          minWidth: 0,
-                        }}
+                        className="read-more-button"
                       >
                         {expanded[notification.id] ? "Show less" : "Read more"}
                       </Button>
