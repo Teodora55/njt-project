@@ -9,25 +9,6 @@ const Customer = (props) => {
       <TableCell>{props.customer.email}</TableCell>
       <TableCell>
         <Button
-          onClick={props.onEditCustomer}
-          variant="contained"
-          color="warning"
-          className="open-AddBookDialog"
-        >
-          EDIT
-        </Button>
-      </TableCell>
-      <TableCell>
-        <Button
-          onClick={props.onDeleteCustomer}
-          variant="contained"
-          color="error"
-        >
-          DELETE
-        </Button>
-      </TableCell>
-      <TableCell>
-        <Button
           onClick={props.onNotifyCustomer}
           variant="contained"
           color="secondary"

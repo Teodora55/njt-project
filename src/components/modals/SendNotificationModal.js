@@ -2,13 +2,18 @@ import { useContext, useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
 
-const SendNotificationModal = ({ customer, mode, onChange }) => {
+const SendNotificationModal = ({
+  customer,
+  mode,
+  onChange,
+  onShowMessageModal,
+}) => {
   const { user } = useContext(UserContext);
   const [notification, setNotification] = useState({
     title: "",
     message: "",
-    recipient: customer ? customer.id : null,
-    sender: user.username,
+    recipientId: customer ? customer.id : null,
+    senderUsername: user.username,
   });
 
   const submitHandler = (event) => {
@@ -26,10 +31,10 @@ const SendNotificationModal = ({ customer, mode, onChange }) => {
       },
       body: JSON.stringify(notification),
     });
+    onChange();
     if (response.ok) {
-      onChange();
-      alert("User successfully notified!");
-    } else alert("There were error while notifying user!");
+      onShowMessageModal("User successfully notified!");
+    } else onShowMessageModal("There were error while notifying user!");
   };
 
   const notifyAllHandler = async () => {
@@ -41,10 +46,10 @@ const SendNotificationModal = ({ customer, mode, onChange }) => {
       },
       body: JSON.stringify(notification),
     });
+    onChange();
     if (response.ok) {
-      onChange();
-      alert("Users successfully notified!");
-    } else alert("There were error while notifying users!");
+      onShowMessageModal("Users successfully notified!");
+    } else onShowMessageModal("There were error while notifying users!");
   };
 
   return (

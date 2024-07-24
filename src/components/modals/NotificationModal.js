@@ -34,7 +34,7 @@ const NotificationModal = ({ notifications, openedNotifications }) => {
 
   return (
     <Box className="modal-body">
-      <Typography variant="h4" className="modal-element">
+      <Typography variant="h4" className="modal-title">
         Notifications
       </Typography>
       <List id="notification-modal-description">

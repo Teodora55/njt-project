@@ -1,6 +1,5 @@
 import React from "react";
 import Customer from "./Customer";
-import CustomerModal from "../modals/CustomerModal";
 import Modal from "../modals/Modal";
 import {
   TextField,
@@ -12,6 +11,7 @@ import {
   TableRow,
   Paper,
   Container,
+  Typography,
 } from "@mui/material";
 import useCustomers from "./../hooks/CustomerHook.js";
 import "./../css/Customer.css";
@@ -23,11 +23,12 @@ const CustomersTable = () => {
     filter,
     setFilter,
     modalState,
-    editCustomerHandler,
-    addCustomerHandler,
+    showMessageModal,
+    message,
     notifyCustomerHandler,
     notifyAllCustomersHandler,
-    deleteCustomerHandler,
+    showMessageModalHandler,
+    closeMessageModalHandler,
     closeHandler,
     changeHandler,
   } = useCustomers();
@@ -45,23 +46,13 @@ const CustomersTable = () => {
         />
       </form>
       <Paper className="paper">
-        <Table className="table" sx={{ border: "none" }}>
-          <TableHead>
+        <Table className="table">
+          <TableHead className="table-header">
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Firstname</TableCell>
               <TableCell>Lastname</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={addCustomerHandler}
-                >
-                  Add
-                </Button>
-              </TableCell>
-              <TableCell />
               <TableCell>
                 <Button
                   variant="contained"
@@ -85,34 +76,29 @@ const CustomersTable = () => {
                 <Customer
                   key={customer.id}
                   customer={customer}
-                  onEditCustomer={() => editCustomerHandler(customer.id)}
-                  onDeleteCustomer={() => deleteCustomerHandler(customer.id)}
                   onNotifyCustomer={() => notifyCustomerHandler(customer.id)}
                 />
               ))}
           </TableBody>
         </Table>
       </Paper>
-      {modalState.showing &&
-        (modalState.mode === "edit" || modalState.mode === "add") && (
-          <Modal onClose={closeHandler}>
-            <CustomerModal
-              mode={modalState.mode}
-              customer={modalState.customer}
-              onChange={changeHandler}
-            />
-          </Modal>
-        )}
-      {modalState.showing &&
-        (modalState.mode === "notify" || modalState.mode === "notifyAll") && (
-          <Modal onClose={closeHandler}>
-            <SendNotificationModal
-              mode={modalState.mode}
-              customer={modalState.customer}
-              onChange={changeHandler}
-            />
-          </Modal>
-        )}
+      {modalState.showing && (
+        <Modal onClose={closeHandler}>
+          <SendNotificationModal
+            mode={modalState.mode}
+            customer={modalState.customer}
+            onChange={changeHandler}
+            onShowMessageModal={showMessageModalHandler}
+          />
+        </Modal>
+      )}
+      {showMessageModal && (
+        <Modal onClose={closeMessageModalHandler}>
+          <Typography variant="h6" className="message">
+            {message}
+          </Typography>
+        </Modal>
+      )}
     </Container>
   );
 };

@@ -54,11 +54,11 @@ const RegistrationForm = (props) => {
     });
     if (response.ok) {
       setError("Username is registered");
-      props.onChangeToBookPage();
       const data = await response.json();
       setUser(data);
       setLogin(true);
       localStorage.setItem("user", JSON.stringify(data));
+      props.onChangeToBookPage();
     } else {
       setError("Username is already used");
       setNewUser((prev) => ({
