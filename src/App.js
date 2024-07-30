@@ -12,6 +12,7 @@ import MyAccount from "./components/account/MyAccount.js";
 import { Box, CircularProgress } from "@mui/material";
 import "./components/css/App.css";
 import "./components/css/ModalContent.css";
+import Cookies from "js-cookie";
 
 function App() {
   const [page, setPage] = useState("");
@@ -20,11 +21,14 @@ function App() {
 
   useEffect(() => {
     const userJSON = localStorage.getItem("user");
-    if (userJSON) {
+    const token = Cookies.get("token");
+    if (userJSON && token) {
       const user = JSON.parse(userJSON);
       setUser(user);
       setLogin(true);
       setPage("books");
+    } else {
+      localStorage.removeItem("user");
     }
     setLoading(false);
   }, [setLogin, setUser]);
