@@ -33,7 +33,6 @@ const Header = (props) => {
     });
 
     if (response.ok) {
-      localStorage.removeItem("user");
       setUser(null);
       setLogin(false);
       props.onChangeToLoginPage();

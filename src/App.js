@@ -12,7 +12,6 @@ import MyAccount from "./components/account/MyAccount.js";
 import { Box, CircularProgress } from "@mui/material";
 import "./components/css/App.css";
 import "./components/css/ModalContent.css";
-import Cookies from "js-cookie";
 
 function App() {
   const [page, setPage] = useState("");
@@ -20,17 +19,26 @@ function App() {
   const { login, setLogin, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    const userJSON = localStorage.getItem("user");
-    const token = Cookies.get("token");
-    if (userJSON && token) {
-      const user = JSON.parse(userJSON);
-      setUser(user);
-      setLogin(true);
-      setPage("books");
-    } else {
-      localStorage.removeItem("user");
-    }
-    setLoading(false);
+    const getUser = async () => {
+      const response = await fetch(`http://localhost:8080/user`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+        setLogin(true);
+        setPage("books");
+      } else if (response.status === 406) {
+        setPage("payment");
+      }
+      setLoading(false);
+    };
+
+    getUser();
   }, [setLogin, setUser]);
 
   const rentBookHandler = () => {

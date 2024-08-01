@@ -7,16 +7,18 @@ const Books = ({ books, onClick }) => {
       {books.map((book) => (
         <Grid item key={book.id} xs={6} sm={4} md={3} className="book-block">
           <Card onClick={() => onClick(book.id)} className="book-card">
-            <CardMedia
-              component="img"
-              alt={book.name}
-              image={
-                book.coverUrl.startsWith("http")
-                  ? book.coverUrl
-                  : `http://localhost:8080/book/cover/${book.coverUrl}`
-              }
-              title={book.name}
-            />
+            {book.coverUrl && (
+              <CardMedia
+                component="img"
+                alt={book.name}
+                image={
+                  book.coverUrl.startsWith("http")
+                    ? book.coverUrl
+                    : `http://localhost:8080/book/cover/${book.coverUrl}`
+                }
+                title={book.name}
+              />
+            )}
             <CardContent>
               <Typography
                 gutterBottom
