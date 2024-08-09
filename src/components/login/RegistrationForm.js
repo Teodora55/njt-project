@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import {
   Container,
   TextField,
@@ -9,67 +9,19 @@ import {
   Link,
   Grid,
 } from "@mui/material";
-import { UserContext } from "../../context/UserContext";
+import { AuthHook } from "../hooks/AuthHook";
 
 const RegistrationForm = (props) => {
-  const [newUser, setNewUser] = useState({
-    firstname: "",
-    lastname: "",
-    jmbg: "",
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [error, setError] = useState("");
-  const { setUser, setLogin } = useContext(UserContext);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser({
-      ...newUser,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (newUser.password !== newUser.confirmPassword) {
-      setError("Passwords do not match!");
-    } else {
-      setError("");
-      registerUser();
-    }
-  };
-
-  const registerUser = async () => {
-    const url = new URL("http://localhost:8080/login/register");
-    const response = await fetch(url, {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(newUser),
-      credentials: "include",
-    });
-    if (response.ok) {
-      setError("Username is registered");
-      const data = await response.json();
-      setUser(data);
-      setLogin(true);
-      props.onChangeToBookPage();
-    } else {
-      setError("Username is already used");
-      setNewUser((prev) => ({
-        ...prev,
-        username: "",
-      }));
-    }
-  };
+  const { newUser, error, handleRegistrationChange, handleSubmitRegistration } =
+    AuthHook();
 
   return (
     <Container maxWidth="sm">
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        onSubmit={(e) => handleSubmitRegistration(e, props.onChangeToBookPage)}
+        sx={{ mt: 3 }}
+      >
         <Typography variant="h4" component="h1" gutterBottom>
           Registration Form
         </Typography>
@@ -79,7 +31,7 @@ const RegistrationForm = (props) => {
           label="Firstname"
           name="firstname"
           value={newUser.firstname}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
         />
         <TextField
@@ -88,7 +40,7 @@ const RegistrationForm = (props) => {
           label="Lastname"
           name="lastname"
           value={newUser.lastname}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
         />
         <TextField
@@ -97,7 +49,7 @@ const RegistrationForm = (props) => {
           label="JMBG"
           name="jmbg"
           value={newUser.jmbg}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
           inputProps={{
             pattern: "\\d{13}",
@@ -110,7 +62,7 @@ const RegistrationForm = (props) => {
           label="Email"
           name="email"
           value={newUser.email}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
           type="email"
         />
@@ -120,7 +72,7 @@ const RegistrationForm = (props) => {
           label="Username"
           name="username"
           value={newUser.username}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
         />
         <TextField
@@ -129,7 +81,7 @@ const RegistrationForm = (props) => {
           label="Password"
           name="password"
           value={newUser.password}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
           type="password"
         />
@@ -139,7 +91,7 @@ const RegistrationForm = (props) => {
           label="Confirm Password"
           name="confirmPassword"
           value={newUser.confirmPassword}
-          onChange={handleChange}
+          onChange={(e) => handleRegistrationChange(e)}
           required
           type="password"
         />

@@ -117,8 +117,9 @@ const useBookModal = (initialBook, mode, onChange) => {
     });
     if (response.ok) {
       if (file) uploadBookCover();
-      onChange();
     }
+    const data = await response.text();
+    onChange(data);
   };
 
   const addBookHandler = async () => {
@@ -132,8 +133,9 @@ const useBookModal = (initialBook, mode, onChange) => {
     });
     if (response.ok) {
       if (file) uploadBookCover();
-      onChange();
     }
+    const data = await response.text();
+    onChange(data);
   };
 
   const uploadBookCover = async () => {

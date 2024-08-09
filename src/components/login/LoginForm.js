@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import {
   TextField,
   Button,
@@ -8,50 +8,10 @@ import {
   Alert,
   Link,
 } from "@mui/material";
-import { UserContext } from "../../context/UserContext";
+import { AuthHook } from "../hooks/AuthHook";
 
 const LoginForm = (props) => {
-  const [loginData, setLoginData] = useState({
-    username: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-  const { setUser, setLogin } = useContext(UserContext);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData({
-      ...loginData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const url = new URL("http://localhost:8080/login/");
-    const response = await fetch(url, {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(loginData),
-      credentials: "include",
-    });
-
-    if (response.ok) {
-      setError("");
-      const data = await response.json();
-      setUser(data);
-      setLogin(true);
-      props.onChangeToBookPage();
-    } else if (response.status === 403) {
-      setError("Invalid username or password");
-    } else if (response.status === 406) {
-      setUser({ username: loginData.username });
-      props.onChangeToPaymentPage();
-    }
-  };
+  const { loginData, error, handleLoginChange, handleSubmitLogin } = AuthHook();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -66,7 +26,17 @@ const LoginForm = (props) => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={(e) =>
+            handleSubmitLogin(
+              e,
+              props.onChangeToBookPage,
+              props.onChangeToPaymentPage
+            )
+          }
+          sx={{ mt: 1 }}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -78,7 +48,7 @@ const LoginForm = (props) => {
             autoComplete="username"
             autoFocus
             value={loginData.username}
-            onChange={handleChange}
+            onChange={handleLoginChange}
           />
           <TextField
             variant="outlined"
@@ -91,7 +61,7 @@ const LoginForm = (props) => {
             id="password"
             autoComplete="current-password"
             value={loginData.password}
-            onChange={handleChange}
+            onChange={handleLoginChange}
           />
           {error && <Alert severity="error">{error}</Alert>}
           <Button

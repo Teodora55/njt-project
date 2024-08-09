@@ -20,7 +20,7 @@ const Modal = (props) => {
   return (
     <Fragment>
       {ReactDOM.createPortal(
-        <Backdrop onClick={props.onClose} />,
+        <Backdrop onClick={() => props.onClose()} />,
         portalBackdrop
       )}
       {ReactDOM.createPortal(

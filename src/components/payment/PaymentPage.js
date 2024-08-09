@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import {
   CardNumberElement,
   CardExpiryElement,
@@ -13,42 +13,16 @@ import {
   Grid,
 } from "@mui/material";
 import "./../css/PaymentPage.css";
-import { UserContext } from "../../context/UserContext";
+import Modal from "../modals/Modal";
+import { PaymentHook } from "../hooks/PaymentHook";
 
 const PaymentPage = (props) => {
-  const [error, setError] = useState(null);
-
-  const { user, setUser } = useContext(UserContext);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const url = new URL("http://localhost:8080/user/membership");
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: user.username,
-    });
-
-    if (response.ok) {
-      if (user.membershipExpiration) {
-        const currentExpirationDate = new Date(user.membershipExpiration);
-        currentExpirationDate.setFullYear(
-          currentExpirationDate.getFullYear() + 1
-        );
-        setUser((prevUser) => ({
-          ...prevUser,
-          membershipExpiration: currentExpirationDate
-            .toISOString()
-            .split("T")[0],
-        }));
-        props.onChangeToAccountPage();
-      } else props.onChangeToLoginPage();
-    } else {
-      setError("There is error with extending you membership!");
-    }
-  };
+  const {
+    modalMessage,
+    showMessageModal,
+    handleSubmit,
+    handleCloseMessageModal,
+  } = PaymentHook(props);
 
   return (
     <Container maxWidth="sm">
@@ -92,11 +66,6 @@ const PaymentPage = (props) => {
               </div>
             </Grid>
           </Grid>
-          {error && (
-            <Typography color="error" variant="body2">
-              {error}
-            </Typography>
-          )}
           <Button
             type="submit"
             fullWidth
@@ -108,6 +77,13 @@ const PaymentPage = (props) => {
           </Button>
         </Box>
       </Box>
+      {showMessageModal && (
+        <Modal onClose={handleCloseMessageModal}>
+          <Typography variant="h6" className="message">
+            {modalMessage}
+          </Typography>
+        </Modal>
+      )}
     </Container>
   );
 };

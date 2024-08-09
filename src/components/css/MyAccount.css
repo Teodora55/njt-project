@@ -43,7 +43,8 @@
 }
 
 .extend-button {
-  margin-left: 16px;
+  margin-left: 16px !important;
+  height: 56px;
 }
 
 .update-button {

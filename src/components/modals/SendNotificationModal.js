@@ -32,9 +32,8 @@ const SendNotificationModal = ({
       body: JSON.stringify(notification),
     });
     onChange();
-    if (response.ok) {
-      onShowMessageModal("User successfully notified!");
-    } else onShowMessageModal("There were error while notifying user!");
+    const data = await response.text();
+    onShowMessageModal(data);
   };
 
   const notifyAllHandler = async () => {
@@ -47,9 +46,8 @@ const SendNotificationModal = ({
       body: JSON.stringify(notification),
     });
     onChange();
-    if (response.ok) {
-      onShowMessageModal("Users successfully notified!");
-    } else onShowMessageModal("There were error while notifying users!");
+    const data = await response.text();
+    onShowMessageModal(data);
   };
 
   return (

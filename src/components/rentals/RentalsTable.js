@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -6,75 +6,23 @@ import {
   TableHead,
   TableRow,
   Box,
+  Typography,
 } from "@mui/material";
 import Rental from "./Rental";
 import "./../css/Rentals.css";
+import Modal from "../modals/Modal";
+import { RentalHook } from "../hooks/RentalHook";
 
 const RentalsTable = () => {
-  const [rentals, setRentals] = useState([]);
-
-  useEffect(() => {
-    const fetchRentals = async () => {
-      const response = await fetch(`http://localhost:8080/rental/current`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setRentals(data);
-      } else {
-        console.error("Failed to fetch rentals");
-      }
-    };
-
-    fetchRentals();
-  }, []);
-
-  const returnBookHandler = async (id) => {
-    const response = await fetch("http://localhost:8080/rental/return", {
-      method: "POST",
-      body: id,
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setRentals((prev) => {
-        return prev.map((el) => {
-          return el.id === id ? { ...el, returnedAt: data.returnedAt } : el;
-        });
-      });
-    }
-  };
-
-  const extendReturningDateHandler = async (id) => {
-    const response = await fetch("http://localhost:8080/rental/extend", {
-      method: "POST",
-      body: id,
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setRentals((prev) => {
-        return prev.map((el) => {
-          return el.id === id ? { ...el, returnBy: data.returnBy } : el;
-        });
-      });
-    }
-  };
-
-  const handleReadBook = async (isbn) => {
-    const url = `http://localhost:8080/rental/read/${isbn}`;
-    window.open(url, "_blank");
-  };
+  const {
+    rentals,
+    modalMessage,
+    showMessageModal,
+    returnBookHandler,
+    extendReturningDateHandler,
+    handleReadBook,
+    handleCloseMessageModal,
+  } = RentalHook();
 
   return (
     <Box className="table-container">
@@ -108,6 +56,13 @@ const RentalsTable = () => {
           ))}
         </TableBody>
       </Table>
+      {showMessageModal && (
+        <Modal onClose={handleCloseMessageModal}>
+          <Typography variant="h6" className="message">
+            {modalMessage}
+          </Typography>
+        </Modal>
+      )}
     </Box>
   );
 };

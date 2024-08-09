@@ -129,6 +129,11 @@ const useBook = () => {
 
   const handleCloseMessageModal = () => setShowMessageModal(false);
 
+  const handleOpenMessageModal = (message) => {
+    setShowMessageModal(true);
+    setModalMessage(message);
+  };
+
   const editBookHandler = (id) => {
     const book = books.find((el) => {
       return el.id === id;
@@ -165,8 +170,9 @@ const useBook = () => {
     dispatchModal({ type: "SHOW_ADD_MODAL" });
   };
 
-  const handleCloseActionModal = () => {
+  const handleCloseActionModal = (message = null) => {
     dispatchModal({ type: "CLOSE_MODAL" });
+    if (message) handleOpenMessageModal(message);
     fetchBooks();
   };
 
@@ -181,14 +187,8 @@ const useBook = () => {
       credentials: "include",
     });
     dispatchModal({ type: "CLOSE_MODAL" });
-    setShowMessageModal(true);
-    if (response.status === 201) {
-      setModalMessage(`'${modalState.book.name}' is successfully rented!`);
-    } else if (response.status === 208) {
-      setModalMessage(`You have already rented '${modalState.book.name}'!`);
-    } else {
-      setModalMessage(`There were problem renting book`);
-    }
+    const data = await response.text();
+    handleOpenMessageModal(data);
   };
 
   return {

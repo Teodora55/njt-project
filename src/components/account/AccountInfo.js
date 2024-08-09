@@ -1,40 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TextField, Button, Typography, Box, Grid } from "@mui/material";
-import { UserContext } from "../../context/UserContext";
+import Modal from "../modals/Modal";
+import { AccountInfoHook } from "../hooks/AccountInfoHook";
 
 const AccountInfo = ({ onChangeToPaymentPage }) => {
-  const { user, setUser } = useContext(UserContext);
-
-  const handleChange = (e) => {
-    setUser((prevUser) => ({
-      ...prevUser,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch(`http://localhost:8080/user/update`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(user),
-    });
-    if (response.ok) {
-      alert("User information updated successfully!");
-    } else {
-      alert("Failed to update user information.");
-    }
-  };
-
-  const isMembershipExpiringSoon = () => {
-    const expirationDate = new Date(user.membershipExpiration);
-    const oneMonthFromToday = new Date();
-    oneMonthFromToday.setMonth(new Date().getMonth() + 1);
-    return expirationDate <= oneMonthFromToday;
-  };
+  const {
+    modalMessage,
+    showMessageModal,
+    user,
+    handleChange,
+    handleSubmit,
+    isMembershipExpiringSoon,
+    handleCloseMessageModal,
+  } = AccountInfoHook();
 
   return (
     <form className="account-paper" onSubmit={handleSubmit}>
@@ -124,6 +102,13 @@ const AccountInfo = ({ onChangeToPaymentPage }) => {
       >
         Update Information
       </Button>
+      {showMessageModal && (
+        <Modal onClose={handleCloseMessageModal}>
+          <Typography variant="h6" className="message">
+            {modalMessage}
+          </Typography>
+        </Modal>
+      )}
     </form>
   );
 };
