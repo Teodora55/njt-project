@@ -5,15 +5,22 @@ import {
   Button,
   Typography,
   Box,
-  Alert,
   Link,
   Grid,
 } from "@mui/material";
 import { AuthHook } from "../hooks/AuthHook";
+import Modal from "../modals/Modal";
 
 const RegistrationForm = (props) => {
-  const { newUser, error, handleRegistrationChange, handleSubmitRegistration } =
-    AuthHook();
+  const {
+    newUser,
+    showMessageModal,
+    modalMessage,
+    isValidInput,
+    handleCloseMessageModal,
+    handleRegistrationChange,
+    handleSubmitRegistration,
+  } = AuthHook();
 
   return (
     <Container maxWidth="sm">
@@ -33,6 +40,7 @@ const RegistrationForm = (props) => {
           value={newUser.firstname}
           onChange={(e) => handleRegistrationChange(e)}
           required
+          error={!isValidInput.firstname}
         />
         <TextField
           fullWidth
@@ -42,6 +50,7 @@ const RegistrationForm = (props) => {
           value={newUser.lastname}
           onChange={(e) => handleRegistrationChange(e)}
           required
+          error={!isValidInput.lastname}
         />
         <TextField
           fullWidth
@@ -55,6 +64,7 @@ const RegistrationForm = (props) => {
             pattern: "\\d{13}",
             title: "JMBG must be exactly 13 digits",
           }}
+          error={!isValidInput.jmbg}
         />
         <TextField
           fullWidth
@@ -65,6 +75,7 @@ const RegistrationForm = (props) => {
           onChange={(e) => handleRegistrationChange(e)}
           required
           type="email"
+          error={!isValidInput.email}
         />
         <TextField
           fullWidth
@@ -74,6 +85,7 @@ const RegistrationForm = (props) => {
           value={newUser.username}
           onChange={(e) => handleRegistrationChange(e)}
           required
+          error={!isValidInput.username}
         />
         <TextField
           fullWidth
@@ -84,6 +96,7 @@ const RegistrationForm = (props) => {
           onChange={(e) => handleRegistrationChange(e)}
           required
           type="password"
+          error={!isValidInput.password}
         />
         <TextField
           fullWidth
@@ -94,11 +107,14 @@ const RegistrationForm = (props) => {
           onChange={(e) => handleRegistrationChange(e)}
           required
           type="password"
+          error={!isValidInput.confirmPassword}
         />
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
+        {showMessageModal && (
+          <Modal onClose={handleCloseMessageModal}>
+            <Typography variant="h6" className="message">
+              {modalMessage}
+            </Typography>
+          </Modal>
         )}
         <Button
           fullWidth

@@ -5,13 +5,21 @@ import {
   Typography,
   Container,
   Box,
-  Alert,
   Link,
 } from "@mui/material";
 import { AuthHook } from "../hooks/AuthHook";
+import Modal from "../modals/Modal";
 
 const LoginForm = (props) => {
-  const { loginData, error, handleLoginChange, handleSubmitLogin } = AuthHook();
+  const {
+    loginData,
+    showMessageModal,
+    modalMessage,
+    isValidInput,
+    handleCloseMessageModal,
+    handleLoginChange,
+    handleSubmitLogin,
+  } = AuthHook();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -49,6 +57,7 @@ const LoginForm = (props) => {
             autoFocus
             value={loginData.username}
             onChange={handleLoginChange}
+            error={!isValidInput.username}
           />
           <TextField
             variant="outlined"
@@ -62,8 +71,15 @@ const LoginForm = (props) => {
             autoComplete="current-password"
             value={loginData.password}
             onChange={handleLoginChange}
+            error={!isValidInput.password}
           />
-          {error && <Alert severity="error">{error}</Alert>}
+          {showMessageModal && (
+            <Modal onClose={handleCloseMessageModal}>
+              <Typography variant="h6" className="message">
+                {modalMessage}
+              </Typography>
+            </Modal>
+          )}
           <Button
             type="submit"
             fullWidth

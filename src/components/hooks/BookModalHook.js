@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 
-const useBookModal = (initialBook, mode, onChange) => {
+const useBookModal = (initialBook, onChange) => {
   const [book, setBook] = useState(initialBook);
   const [file, setFile] = useState(null);
+  const [isValidInput, setIsValidInput] = useState({
+    name: true,
+    authors: true,
+  });
   const [searchAuthor, setSearchAuthor] = useState("");
   const [searchBookshelf, setSearchBookshelf] = useState("");
   const [allAuthorsAndBookshelfs, setAllAuthorsAndBookshelfs] = useState({
@@ -107,6 +111,7 @@ const useBookModal = (initialBook, mode, onChange) => {
   };
 
   const editBookHandler = async () => {
+    if (!validateBook()) return;
     const response = await fetch(`http://localhost:8080/book/${book.id}`, {
       method: "PUT",
       headers: new Headers({
@@ -123,6 +128,7 @@ const useBookModal = (initialBook, mode, onChange) => {
   };
 
   const addBookHandler = async () => {
+    if (!validateBook()) return;
     const response = await fetch("http://localhost:8080/book", {
       method: "POST",
       headers: new Headers({
@@ -136,6 +142,17 @@ const useBookModal = (initialBook, mode, onChange) => {
     }
     const data = await response.text();
     onChange(data);
+  };
+
+  const validateBook = () => {
+    const bookRegex = /^[a-zA-Z0-9 .,'!?:;"-]{2,50}$/;
+    const validBook = bookRegex.test(book.name);
+    const validAuthor = book.authors && book.authors.length > 0;
+    setIsValidInput({
+      name: validBook,
+      authors: validAuthor,
+    });
+    return validAuthor && validBook;
   };
 
   const uploadBookCover = async () => {
@@ -155,10 +172,16 @@ const useBookModal = (initialBook, mode, onChange) => {
     }
   };
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    if (mode === "edit") editBookHandler();
-    else if (mode === "add") addBookHandler();
+  const deleteBookHandler = async () => {
+    const response = await fetch(`http://localhost:8080/book/${book.id}`, {
+      method: "DELETE",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+      credentials: "include",
+    });
+    const data = await response.text();
+    onChange(data);
   };
 
   return {
@@ -166,12 +189,15 @@ const useBookModal = (initialBook, mode, onChange) => {
     searchAuthor,
     searchBookshelf,
     matchingAuthorsAndBookshelfs,
+    isValidInput,
     setSearchAuthor,
     setSearchBookshelf,
     handleAuthorChange,
     handleBookshelfChange,
     handleFileChange,
-    submitHandler,
+    addBookHandler,
+    editBookHandler,
+    deleteBookHandler,
     setBook,
   };
 };

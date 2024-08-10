@@ -1,6 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
+import { SendNotificationHook } from "../hooks/SendNotificationHook";
 
 const SendNotificationModal = ({
   customer,
@@ -9,50 +10,12 @@ const SendNotificationModal = ({
   onShowMessageModal,
 }) => {
   const { user } = useContext(UserContext);
-  const [notification, setNotification] = useState({
-    title: "",
-    message: "",
-    recipientId: customer ? customer.id : null,
-    senderUsername: user.username,
-  });
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    if (mode === "notify") notifyUserHandler();
-    else if (mode === "notifyAll") notifyAllHandler();
-  };
-
-  const notifyUserHandler = async () => {
-    const response = await fetch(`http://localhost:8080/notify`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notification),
-    });
-    onChange();
-    const data = await response.text();
-    onShowMessageModal(data);
-  };
-
-  const notifyAllHandler = async () => {
-    const response = await fetch(`http://localhost:8080/notify/all`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notification),
-    });
-    onChange();
-    const data = await response.text();
-    onShowMessageModal(data);
-  };
+  const { notification, isValidInput, setNotification, submitHandler } =
+    SendNotificationHook(customer, user, onChange, onShowMessageModal);
 
   return (
     <div className="modal-body">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={(e) => submitHandler(e, mode)}>
         <Typography variant="h6" className="modal-element">
           Notification
         </Typography>
@@ -64,6 +27,7 @@ const SendNotificationModal = ({
           onChange={(e) =>
             setNotification((prev) => ({ ...prev, title: e.target.value }))
           }
+          error={!isValidInput.title}
         />
         <TextField
           variant="outlined"
@@ -75,6 +39,7 @@ const SendNotificationModal = ({
           onChange={(e) =>
             setNotification((prev) => ({ ...prev, message: e.target.value }))
           }
+          error={!isValidInput.message}
         />
         <div>
           <Button

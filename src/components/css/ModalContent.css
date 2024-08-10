@@ -24,7 +24,7 @@
 }
 
 .modal-element {
-  width: 500px;
+  width: 500px !important;
   max-width: 600px;
   margin-bottom: 12px !important;
   font-family: "Georgia" !important;

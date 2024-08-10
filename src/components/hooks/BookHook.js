@@ -13,7 +13,7 @@ const modalReducer = (state, action) => {
     return {
       mode: "add",
       showing: true,
-      book: {},
+      book: { name: "", authors: [], bookshelves: [] },
     };
   }
   if (action.type === "CLOSE_MODAL") {
