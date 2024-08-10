@@ -8,14 +8,34 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Modal from "../modals/Modal";
+import AuthorModal from "../modals/AuthorModal";
+import BookshelfModal from "../modals/BookshelfModal";
+import { BookFilterHook } from "../hooks/BookFilterHook";
 
-const BookFilter = ({ authors, bookshelves, onFilterChange }) => {
-  const handleFilterChange = (event) => {
-    const { name, checked } = event.target;
-    onFilterChange(name, checked);
-  };
+const BookFilter = ({
+  authors,
+  bookshelves,
+  onFilterChange,
+  fetchAuthors,
+  fetchBookShelves,
+}) => {
+  const {
+    user,
+    showAuthorModal,
+    setShowAuthorModal,
+    showBookshelfModal,
+    setShowBookshelfModal,
+    showMessageModal,
+    message,
+    handleFilterChange,
+    handleCloseModal,
+    handleCloseMessageModal,
+    changeHandler,
+  } = BookFilterHook(fetchAuthors, fetchBookShelves, onFilterChange);
 
   return (
     <div className="sidebar">
@@ -42,6 +62,16 @@ const BookFilter = ({ authors, bookshelves, onFilterChange }) => {
                   label={author}
                 />
               ))}
+              {user.role === "ADMIN" && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => setShowAuthorModal(true)}
+                  sx={{ marginTop: 2 }}
+                >
+                  + Add Author
+                </Button>
+              )}
             </FormGroup>
           </FormControl>
         </AccordionDetails>
@@ -68,10 +98,37 @@ const BookFilter = ({ authors, bookshelves, onFilterChange }) => {
                   label={shelf}
                 />
               ))}
+              {user.role === "ADMIN" && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => setShowBookshelfModal(true)}
+                  sx={{ marginTop: 2 }}
+                >
+                  + Add Bookshelf
+                </Button>
+              )}
             </FormGroup>
           </FormControl>
         </AccordionDetails>
       </Accordion>
+      {showAuthorModal && (
+        <Modal onClose={handleCloseModal}>
+          <AuthorModal onChange={changeHandler} />
+        </Modal>
+      )}
+      {showBookshelfModal && (
+        <Modal onClose={handleCloseModal}>
+          <BookshelfModal onChange={changeHandler} />
+        </Modal>
+      )}
+      {showMessageModal && (
+        <Modal onClose={handleCloseMessageModal}>
+          <Typography variant="h6" className="message">
+            {message}
+          </Typography>
+        </Modal>
+      )}
     </div>
   );
 };

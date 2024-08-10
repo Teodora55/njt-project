@@ -22,6 +22,8 @@ const BookPage = () => {
     showMessageModal,
     modalState,
     availableToRent,
+    fetchAuthors,
+    fetchBookShelves,
     setSearchTerm,
     handleFilterChange,
     handleCloseMessageModal,
@@ -45,6 +47,8 @@ const BookPage = () => {
           authors={authors}
           bookshelves={bookshelves}
           onFilterChange={handleFilterChange}
+          fetchAuthors={fetchAuthors}
+          fetchBookShelves={fetchBookShelves}
         />
         <Box className="books">
           {user.role === "ADMIN" && (

@@ -203,6 +203,8 @@ const useBook = () => {
     showMessageModal,
     modalState,
     availableToRent,
+    fetchAuthors,
+    fetchBookShelves,
     setSearchTerm,
     handleFilterChange,
     handleCloseMessageModal,
