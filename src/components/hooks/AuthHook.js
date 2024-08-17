@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
-export const AuthHook = () => {
+export const useAuth = () => {
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",

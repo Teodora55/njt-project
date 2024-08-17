@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const RentalHook = () => {
+export const useRental = () => {
   const [rentals, setRentals] = useState([]);
   const [modalMessage, setModalMessage] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);

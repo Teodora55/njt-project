@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, TextField } from "@mui/material";
-import { AuthorModalHook } from "../hooks/AuthorModalHook";
+import { useAuthorModal } from "../hooks/AuthorModalHook";
 
 const AuthorModal = ({ onChange }) => {
   const { author, setAuthor, isAuthorValid, addAuthorHandler } =
-    AuthorModalHook();
+    useAuthorModal();
 
   return (
     <Box className="modal-body">

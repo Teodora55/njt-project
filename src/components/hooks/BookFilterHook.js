@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
-export const BookFilterHook = (
+export const useBookFilter = (
   fetchAuthors,
   fetchBookShelves,
   onFilterChange

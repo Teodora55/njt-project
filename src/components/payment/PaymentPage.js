@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import "./../css/PaymentPage.css";
 import Modal from "../modals/Modal";
-import { PaymentHook } from "../hooks/PaymentHook";
+import { usePayment } from "../hooks/PaymentHook";
 
 const PaymentPage = (props) => {
   const {
@@ -22,7 +22,7 @@ const PaymentPage = (props) => {
     showMessageModal,
     handleSubmit,
     handleCloseMessageModal,
-  } = PaymentHook(props);
+  } = usePayment(props);
 
   return (
     <Container maxWidth="sm">

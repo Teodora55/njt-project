@@ -7,7 +7,7 @@ import {
   Box,
   Link,
 } from "@mui/material";
-import { AuthHook } from "../hooks/AuthHook";
+import { useAuth } from "../hooks/AuthHook";
 import Modal from "../modals/Modal";
 
 const LoginForm = (props) => {
@@ -19,7 +19,7 @@ const LoginForm = (props) => {
     handleCloseMessageModal,
     handleLoginChange,
     handleSubmitLogin,
-  } = AuthHook();
+  } = useAuth();
 
   return (
     <Container component="main" maxWidth="xs">

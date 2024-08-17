@@ -14,7 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Modal from "../modals/Modal";
 import AuthorModal from "../modals/AuthorModal";
 import BookshelfModal from "../modals/BookshelfModal";
-import { BookFilterHook } from "../hooks/BookFilterHook";
+import { useBookFilter } from "../hooks/BookFilterHook";
 
 const BookFilter = ({
   authors,
@@ -35,7 +35,7 @@ const BookFilter = ({
     handleCloseModal,
     handleCloseMessageModal,
     changeHandler,
-  } = BookFilterHook(fetchAuthors, fetchBookShelves, onFilterChange);
+  } = useBookFilter(fetchAuthors, fetchBookShelves, onFilterChange);
 
   return (
     <div className="sidebar">

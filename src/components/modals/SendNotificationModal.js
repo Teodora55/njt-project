@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
-import { SendNotificationHook } from "../hooks/SendNotificationHook";
+import { useSendNotification } from "../hooks/SendNotificationHook";
 
 const SendNotificationModal = ({
   customer,
@@ -11,7 +11,7 @@ const SendNotificationModal = ({
 }) => {
   const { user } = useContext(UserContext);
   const { notification, isValidInput, setNotification, submitHandler } =
-    SendNotificationHook(customer, user, onChange, onShowMessageModal);
+    useSendNotification(customer, user, onChange, onShowMessageModal);
 
   return (
     <div className="modal-body">

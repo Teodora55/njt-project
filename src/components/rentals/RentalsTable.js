@@ -11,7 +11,7 @@ import {
 import Rental from "./Rental";
 import "./../css/Rentals.css";
 import Modal from "../modals/Modal";
-import { RentalHook } from "../hooks/RentalHook";
+import { useRental } from "../hooks/RentalHook";
 
 const RentalsTable = () => {
   const {
@@ -22,7 +22,7 @@ const RentalsTable = () => {
     extendReturningDateHandler,
     handleReadBook,
     handleCloseMessageModal,
-  } = RentalHook();
+  } = useRental();
 
   return (
     <Box className="table-container">

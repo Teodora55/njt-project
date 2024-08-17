@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const AuthorModalHook = () => {
+export const useAuthorModal = () => {
   const [author, setAuthor] = useState({
     firstname: "",
     lastname: "",

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 
-export const AccountInfoHook = () => {
+export const useAccountInfo = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 

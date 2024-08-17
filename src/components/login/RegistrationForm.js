@@ -8,7 +8,7 @@ import {
   Link,
   Grid,
 } from "@mui/material";
-import { AuthHook } from "../hooks/AuthHook";
+import { useAuth } from "../hooks/AuthHook";
 import Modal from "../modals/Modal";
 
 const RegistrationForm = (props) => {
@@ -20,7 +20,7 @@ const RegistrationForm = (props) => {
     handleCloseMessageModal,
     handleRegistrationChange,
     handleSubmitRegistration,
-  } = AuthHook();
+  } = useAuth();
 
   return (
     <Container maxWidth="sm">

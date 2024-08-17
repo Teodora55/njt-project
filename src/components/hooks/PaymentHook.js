@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
-export const PaymentHook = (props) => {
+export const usePayment = (props) => {
   const [modalMessage, setModalMessage] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [changePage, setChangePage] = useState(() => () => {});

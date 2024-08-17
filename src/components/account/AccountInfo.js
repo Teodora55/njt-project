@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, Button, Typography, Box, Grid } from "@mui/material";
 import Modal from "../modals/Modal";
-import { AccountInfoHook } from "../hooks/AccountInfoHook";
+import { useAccountInfo } from "../hooks/AccountInfoHook";
 
 const AccountInfo = ({ onChangeToPaymentPage }) => {
   const {
@@ -12,7 +12,7 @@ const AccountInfo = ({ onChangeToPaymentPage }) => {
     handleSubmit,
     isMembershipExpiringSoon,
     handleCloseMessageModal,
-  } = AccountInfoHook();
+  } = useAccountInfo();
 
   return (
     <form className="account-paper" onSubmit={handleSubmit}>

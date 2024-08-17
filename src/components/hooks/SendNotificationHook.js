@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const SendNotificationHook = (
+export const useSendNotification = (
   customer,
   user,
   onChange,
