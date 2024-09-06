@@ -1,12 +1,15 @@
 import React from "react";
 import { Autocomplete, Box, Button, Chip, TextField } from "@mui/material";
 import useBookModal from "../hooks/BookModalHook";
+import BookCopyModal from "./BookCopyModal";
+import Modal from "./Modal";
 
 const EditBookModal = (props) => {
   const {
     book,
     matchingAuthorsAndBookshelfs,
     isValidInput,
+    openCopyModal,
     setSearchAuthor,
     setSearchBookshelf,
     handleAuthorChange,
@@ -14,8 +17,11 @@ const EditBookModal = (props) => {
     handleFileChange,
     addBookHandler,
     editBookHandler,
+    addCopyHandler,
     deleteBookHandler,
     setBook,
+    setOpenCopyModal,
+    changeBookCopyHandler,
   } = useBookModal(props.book, props.onChange);
 
   return (
@@ -121,6 +127,17 @@ const EditBookModal = (props) => {
         {props.mode === "edit" && (
           <Button
             variant="contained"
+            color="success"
+            fullWidth
+            className="modal-element"
+            onClick={addCopyHandler}
+          >
+            Add Book Copy
+          </Button>
+        )}
+        {props.mode === "edit" && (
+          <Button
+            variant="contained"
             color="error"
             fullWidth
             className="modal-element"
@@ -130,6 +147,11 @@ const EditBookModal = (props) => {
           </Button>
         )}
       </Box>
+      {openCopyModal && (
+        <Modal onClose={() => setOpenCopyModal(false)}>
+          <BookCopyModal book={book} onChange={changeBookCopyHandler} />
+        </Modal>
+      )}
     </Box>
   );
 };

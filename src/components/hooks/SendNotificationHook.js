@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFetchData } from "./FetchDataHook";
 
 export const useSendNotification = (
   customer,
@@ -17,38 +18,22 @@ export const useSendNotification = (
     message: true,
   });
 
-  const notifyUserHandler = async () => {
-    if (!verifyNotification()) return;
-    const response = await fetch(`http://localhost:8080/notify`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notification),
-    });
-    onChange();
-    const data = await response.text();
-    onShowMessageModal(data);
-  };
+  const { fetchData } = useFetchData();
 
-  const notifyAllHandler = async () => {
+  const notifyHandler = async (url) => {
     if (!verifyNotification()) return;
-    const response = await fetch(`http://localhost:8080/notify/all`, {
+    const response = await fetchData({
+      url: url,
       method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notification),
+      body: notification,
     });
     onChange();
     const data = await response.text();
-    onShowMessageModal(data);
+    onShowMessageModal("There were error while notifying user!");
   };
 
   const verifyNotification = () => {
-    const titleRegex = /^[a-zA-Z][a-zA-Z '-]{5,50}$/;
+    const titleRegex = /^[a-zA-Z][a-zA-Z '-]{4,50}$/;
     const titleValid = titleRegex.test(notification.title);
     const messageValid = notification.message.length > 20;
     setIsValidInput({
@@ -60,8 +45,10 @@ export const useSendNotification = (
 
   const submitHandler = (event, mode) => {
     event.preventDefault();
-    if (mode === "notify") notifyUserHandler();
-    else if (mode === "notifyAll") notifyAllHandler();
+    let url;
+    if (mode === "notify") url = `http://localhost:8080/notify`;
+    else if (mode === "notifyAll") url = `http://localhost:8080/notify/all`;
+    notifyHandler(url);
   };
 
   return {

@@ -1,4 +1,10 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { UserContext } from "../../context/UserContext";
 
 const modalReducer = (state, action) => {
@@ -48,11 +54,50 @@ const useBook = () => {
 
   const { user } = useContext(UserContext);
 
+  const fetchData = async (url, onSuccess, errorMessage) => {
+    const response = await fetch(url, {
+      credentials: "include",
+    });
+    if (response.ok) {
+      const data = await response.json();
+      onSuccess(data);
+    } else {
+      console.error(errorMessage);
+    }
+  };
+
+  const fetchBooks = useCallback(async () => {
+    fetchData(
+      "http://localhost:8080/book/all",
+      setBooks,
+      "Error fetching books"
+    );
+  }, []);
+
+  const fetchAuthors = useCallback(async () => {
+    fetchData(
+      "http://localhost:8080/author/all",
+      (data) =>
+        setAuthors(
+          data.map((author) => author.firstname + " " + author.lastname)
+        ),
+      "Error fetching authors"
+    );
+  }, []);
+
+  const fetchBookShelves = useCallback(async () => {
+    fetchData(
+      "http://localhost:8080/bookshelf/all",
+      (data) => setBookshelves(data.map((bookshelf) => bookshelf.name)),
+      "Error fetching books"
+    );
+  }, []);
+
   useEffect(() => {
     fetchBooks();
     fetchAuthors();
     fetchBookShelves();
-  }, []);
+  }, [fetchBooks, fetchAuthors, fetchBookShelves]);
 
   useEffect(() => {
     setFilteredBooks(
@@ -72,44 +117,6 @@ const useBook = () => {
       })
     );
   }, [books, filters, searchTerm]);
-
-  const fetchBooks = async () => {
-    const response = await fetch("http://localhost:8080/book/all", {
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setBooks(data);
-    } else {
-      console.error("Error fetching books");
-    }
-  };
-
-  const fetchAuthors = async () => {
-    const response = await fetch("http://localhost:8080/author/all", {
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setAuthors(
-        data.map((author) => author.firstname + " " + author.lastname)
-      );
-    } else {
-      console.error("Error fetching books");
-    }
-  };
-
-  const fetchBookShelves = async () => {
-    const response = await fetch("http://localhost:8080/bookshelf/all", {
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setBookshelves(data.map((bookshelf) => bookshelf.name));
-    } else {
-      console.error("Error fetching books");
-    }
-  };
 
   const handleFilterChange = (name, checked) => {
     setFilters((prevFilters) => {

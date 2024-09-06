@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useFetchData } from "./FetchDataHook";
 
 const useBookModal = (initialBook, onChange) => {
   const [book, setBook] = useState(initialBook);
@@ -18,6 +19,9 @@ const useBookModal = (initialBook, onChange) => {
       authors: [],
       bookshelves: [],
     });
+  const [openCopyModal, setOpenCopyModal] = useState(false);
+
+  const { fetchData } = useFetchData();
 
   useEffect(() => {
     const loadAuthors = async () => {
@@ -25,12 +29,7 @@ const useBookModal = (initialBook, onChange) => {
         credentials: "include",
       });
       const data = await response.json();
-      const authors = data.map((author) => ({
-        id: author.id,
-        firstname: author.firstname,
-        lastname: author.lastname,
-      }));
-      setAllAuthorsAndBookshelfs((prev) => ({ ...prev, authors }));
+      setAllAuthorsAndBookshelfs((prev) => ({ ...prev, authors: data }));
     };
 
     const loadBookshelves = async () => {
@@ -38,11 +37,7 @@ const useBookModal = (initialBook, onChange) => {
         credentials: "include",
       });
       const data = await response.json();
-      const bookshelves = data.map((bookshelf) => ({
-        id: bookshelf.id,
-        name: bookshelf.name,
-      }));
-      setAllAuthorsAndBookshelfs((prev) => ({ ...prev, bookshelves }));
+      setAllAuthorsAndBookshelfs((prev) => ({ ...prev, bookshelves: data }));
     };
 
     loadAuthors();
@@ -112,13 +107,10 @@ const useBookModal = (initialBook, onChange) => {
 
   const editBookHandler = async () => {
     if (!validateBook()) return;
-    const response = await fetch(`http://localhost:8080/book/${book.id}`, {
+    const response = await fetchData({
+      url: `http://localhost:8080/book/${book.id}`,
       method: "PUT",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(book),
-      credentials: "include",
+      body: book,
     });
     if (response.ok) {
       if (file) uploadBookCover();
@@ -127,15 +119,16 @@ const useBookModal = (initialBook, onChange) => {
     onChange(data);
   };
 
+  const addCopyHandler = () => {
+    setOpenCopyModal(true);
+  };
+
   const addBookHandler = async () => {
     if (!validateBook()) return;
-    const response = await fetch("http://localhost:8080/book", {
+    const response = await fetchData({
+      url: `http://localhost:8080/book`,
       method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(book),
-      credentials: "include",
+      body: book,
     });
     if (response.ok) {
       if (file) uploadBookCover();
@@ -173,15 +166,17 @@ const useBookModal = (initialBook, onChange) => {
   };
 
   const deleteBookHandler = async () => {
-    const response = await fetch(`http://localhost:8080/book/${book.id}`, {
+    const response = await fetchData({
+      url: `http://localhost:8080/book/${book.id}`,
       method: "DELETE",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      credentials: "include",
     });
     const data = await response.text();
     onChange(data);
+  };
+
+  const changeBookCopyHandler = (message) => {
+    setOpenCopyModal(false);
+    onChange(message);
   };
 
   return {
@@ -190,6 +185,7 @@ const useBookModal = (initialBook, onChange) => {
     searchBookshelf,
     matchingAuthorsAndBookshelfs,
     isValidInput,
+    openCopyModal,
     setSearchAuthor,
     setSearchBookshelf,
     handleAuthorChange,
@@ -197,8 +193,11 @@ const useBookModal = (initialBook, onChange) => {
     handleFileChange,
     addBookHandler,
     editBookHandler,
+    addCopyHandler,
     deleteBookHandler,
     setBook,
+    setOpenCopyModal,
+    changeBookCopyHandler,
   };
 };
 

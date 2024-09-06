@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
+import { useFetchData } from "./FetchDataHook";
 
 export const useRental = () => {
   const [rentals, setRentals] = useState([]);
   const [modalMessage, setModalMessage] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 
+  const { fetchData } = useFetchData();
+
   useEffect(() => {
     const fetchRentals = async () => {
-      const response = await fetch(`http://localhost:8080/rental/current`, {
+      const response = await fetchData({
+        url: `http://localhost:8080/rental/current`,
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
       });
       if (response.ok) {
         const data = await response.json();
@@ -23,7 +23,7 @@ export const useRental = () => {
     };
 
     fetchRentals();
-  }, []);
+  }, [fetchData]);
 
   const returnBookHandler = async (id) => {
     const response = await fetch("http://localhost:8080/rental/return", {

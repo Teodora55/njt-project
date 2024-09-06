@@ -13,9 +13,6 @@ export const usePayment = (props) => {
     const url = new URL("http://localhost:8080/user/membership");
     const response = await fetch(url, {
       method: "PUT",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
       body: user.username,
     });
     const data = await response.text();

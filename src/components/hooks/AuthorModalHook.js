@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFetchData } from "./FetchDataHook";
 
 export const useAuthorModal = () => {
   const [author, setAuthor] = useState({
@@ -14,6 +15,8 @@ export const useAuthorModal = () => {
     yearOfBirth: true,
     yearOfDeath: true,
   });
+
+  const { fetchData } = useFetchData();
 
   const validateInput = () => {
     const nameRegex = /^[a-zA-Z][a-zA-Z '-.]{0,28}[a-zA-Z.]$/;
@@ -37,13 +40,10 @@ export const useAuthorModal = () => {
 
   const addAuthorHandler = async (onChange) => {
     if (!validateInput()) return;
-    const response = await fetch("http://localhost:8080/author", {
+    const response = await fetchData({
+      url: "http://localhost:8080/author",
       method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(author),
-      credentials: "include",
+      body: author,
     });
     const data = await response.text();
     onChange(data);

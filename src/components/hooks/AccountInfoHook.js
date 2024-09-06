@@ -1,11 +1,14 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import { useFetchData } from "./FetchDataHook";
 
 export const useAccountInfo = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 
   const { user, setUser } = useContext(UserContext);
+
+  const { fetchData } = useFetchData();
 
   const handleChange = (e) => {
     const updateCustomer = {
@@ -20,16 +23,39 @@ export const useAccountInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:8080/user/update`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(user),
+    const message = validateCustomerInput();
+    if (message !== "") handleOpenMessageModal(message);
+    else {
+      const response = await fetchData({
+        url: `http://localhost:8080/user/update`,
+        method: "PUT",
+        body: user,
+      });
+      const data = await response.text();
+      handleOpenMessageModal(data);
+    }
+  };
+
+  const validateCustomerInput = () => {
+    let message = "";
+
+    const validatonRegex = {
+      firstname: /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/,
+      lastname: /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/,
+      jmbg: /^\d{13}$/,
+      email: /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+    };
+    console.log(user.customer);
+    Object.keys(user.customer).forEach((key) => {
+      if (key === "id") return;
+      if (!validateInput(user.customer[key], validatonRegex[key]))
+        message += `${key} is not valid; `;
     });
-    const data = await response.text();
-    handleOpenMessageModal(data);
+    return message;
+  };
+
+  const validateInput = (input, regex) => {
+    return regex.test(input);
   };
 
   const isMembershipExpiringSoon = () => {

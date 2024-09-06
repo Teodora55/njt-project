@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import { useFetchData } from "./FetchDataHook";
 
 export const useAuth = () => {
   const [loginData, setLoginData] = useState({
@@ -29,6 +30,18 @@ export const useAuth = () => {
   });
   const { setUser, setLogin } = useContext(UserContext);
 
+  const { fetchData } = useFetchData();
+
+  const userValidatonRegex = {
+    firstname: /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/,
+    lastname: /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/,
+    jmbg: /^\d{13}$/,
+    email: /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+    username: /^[a-zA-Z0-9]{5,20}$/,
+    password:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  };
+
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
     setLoginData({
@@ -51,17 +64,15 @@ export const useAuth = () => {
     onChangeToPaymentPage
   ) => {
     e.preventDefault();
-    if (validateLoginInput()) {
-      handleOpenMessageModal("Invalid username or password");
+    const message = validateLoginInput();
+    if (message !== "") {
+      handleOpenMessageModal(message);
     } else {
       const url = new URL("http://localhost:8080/login/");
-      const response = await fetch(url, {
+      const response = await fetchData({
+        url: url,
         method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        body: JSON.stringify(loginData),
-        credentials: "include",
+        body: loginData,
       });
 
       if (response.ok) {
@@ -82,26 +93,31 @@ export const useAuth = () => {
   };
 
   const validateLoginInput = () => {
-    const usernameValid = validateInput(
-      loginData.username,
-      /^[a-zA-Z0-9]{5,20}$/
-    );
-    const passwordValid = validateInput(
-      loginData.password,
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    );
+    let message = "";
+    const validLoginUser = {
+      username: true,
+      password: true,
+    };
+    Object.keys(loginData).forEach((key) => {
+      validLoginUser[key] = validateInput(
+        loginData[key],
+        userValidatonRegex[key]
+      );
+      if (!validLoginUser[key]) message += `${key} is not valid; `;
+    });
     setIsValidInput((prev) => ({
       ...prev,
-      username: usernameValid,
-      password: passwordValid,
+      username: validLoginUser.username,
+      password: validLoginUser.password,
     }));
-    return !usernameValid || !passwordValid;
+    return message;
   };
 
   const handleSubmitRegistration = async (e, onChangeToBookPage) => {
     e.preventDefault();
-    if (validateRegistrationInput()) {
-      handleOpenMessageModal("Invalid input");
+    const message = validateRegistrationInput();
+    if (message !== "") {
+      handleOpenMessageModal(message);
     } else if (newUser.password !== newUser.confirmPassword) {
       setIsValidInput((prev) => ({
         ...prev,
@@ -114,47 +130,31 @@ export const useAuth = () => {
   };
 
   const validateRegistrationInput = () => {
+    let message = "";
     const validNewUser = {
-      firstname: validateInput(
-        newUser.firstname,
-        /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/
-      ),
-      lastname: validateInput(
-        newUser.lastname,
-        /^[a-zA-Z][a-zA-Z '-]{0,28}[a-zA-Z]$/
-      ),
-      jmbg: validateInput(newUser.jmbg, /^\d{13}$/),
-      email: validateInput(
-        newUser.email,
-        /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
-      ),
-      username: validateInput(newUser.username, /^[a-zA-Z0-9]{5,20}$/),
-      password: validateInput(
-        newUser.password,
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-      ),
+      firstname: true,
+      lastname: true,
+      jmbg: true,
+      email: true,
+      username: true,
+      password: true,
       confirmPassword: true,
     };
+    Object.keys(newUser).forEach((key) => {
+      if (key === "confirmPassword") return;
+      validNewUser[key] = validateInput(newUser[key], userValidatonRegex[key]);
+      if (!validNewUser[key]) message += `${key} is not valid; `;
+    });
     setIsValidInput(validNewUser);
-    return (
-      !validNewUser.firstname ||
-      !validNewUser.lastname ||
-      !validNewUser.jmbg ||
-      !validNewUser.email ||
-      !validNewUser.username ||
-      !validNewUser.password
-    );
+    return message;
   };
 
   const registerUser = async (onChangeToBookPage) => {
     const url = new URL("http://localhost:8080/login/register");
-    const response = await fetch(url, {
+    const response = await fetchData({
+      url: url,
       method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(newUser),
-      credentials: "include",
+      body: newUser,
     });
     if (response.ok) {
       handleOpenMessageModal("Username is registered");
